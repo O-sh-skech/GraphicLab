@@ -1,0 +1,36 @@
+body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
+    input[type="text"] {
+        background-color: rgb(241, 216, 231);
+    }
+    .button-panel button {
+      background-color: rgb(220, 141, 7);
+      margin: 2px;
+    }
+    /* 入力ボタンだけ間隔を狭く */
+    .button-panel .input-btn {
+      margin: 0.1px;
+    }
+    /* 親要素に対して絶対配置で中央 */
+    #three-canvas {
+      width: 700px;
+        height: 400px;
+        background-color: rgb(232, 138, 16);
+
+        position: absolute;  /* 絶対配置 */
+        left: 50%;           /* 左から50% */
+        transform: translate(-50%, 0%); /* 自分の幅・高さの半分だけ戻す */
+        display: block;
+    }
+
+    .layout {
+      position: relative;
+      padding: 20px;
+    }
+
+    /* PLAY ANIMATION ボタンだけ右上固定 */
+    #animateBtn {
+      position: absolute;
+      right: 10px;  /* 右から10px */
+      background-color: rgb(226, 143, 9);
+      z-index: 10;  /* 他の要素より前面に */
+    }

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Play Animation{% endblock %}
+
+{% block messages %}
+  <!-- 子テンプレート独自のメッセージ表示 -->
+  {% if error %}
+    <p class="error" style="color: red;">エラー: {{ error }}</p>
+  {% endif %}
+
+  {% if message %}
+    <p class="info">{{ message }}</p>
+  {% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script type="module" src="{{ url_for('static', filename='anim.js') }}"></script>
+{% endblock %}

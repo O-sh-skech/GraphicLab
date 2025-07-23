@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Surface Graphic 3D{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+  <div class="layout">
+    <form method="POST" action="{{ url_for('index') }}">
+      <input type="text" id="functionInput" name="function_text" placeholder="f(x,y)=" value="{{ function_text or '' }}" />
+      
+        {% block messages %}
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {% if message %}
+            <p>{{ message }}</p>
+        {% endif %}
+        {% endblock %}
+
+      <div class="button-panel">
+        <button type="button" class="input-btn" data-insert="x">x</button>
+        <button type="button" class="input-btn" data-insert="y">y</button>
+        <button type="button" class="input-btn" data-insert="+">+</button>
+        <button type="button" class="input-btn" data-insert="-">-</button>
+        <button type="button" class="input-btn" data-insert="*">×</button>
+        <button type="button" class="input-btn" data-insert="/">÷</button>
+        <button type="button" class="input-btn" data-insert="sqrt()">√</button>
+        <button type="button" class="input-btn" data-insert="**">^</button>
+        <button type="button" class="input-btn" data-insert="E">e</button>
+
+        <!-- ClickMe ボタン -->
+        <button id="plotBtn" type="submit">ClickMe</button>
+      </div>
+    </form>
+
+        <!-- アニメーション用ボタン -->
+    <form method="POST" action="{{ url_for('animate') }}">
+        <button id="animateBtn" type="submit">PLAY ANIMATION</button>
+    </form>
+
+  </div>
+
+  <!-- 描画用canvas -->
+  <canvas id="three-canvas"></canvas>
+
+  <!-- 入力補助用JS -->
+  <script>
+    const functionInput = document.getElementById('functionInput');
+    document.querySelectorAll('.button-panel button[data-insert]').forEach(button => {
+      button.addEventListener('click', () => {
+        const insertValue = button.getAttribute('data-insert');
+        const cursorPos = functionInput.selectionStart;
+        const before = functionInput.value.substring(0, cursorPos);
+        const after = functionInput.value.substring(cursorPos);
+        functionInput.value = before + insertValue + after;
+        functionInput.focus();
+        functionInput.selectionStart = functionInput.selectionEnd = cursorPos + insertValue.length;
+      });
+    });
+  </script>
+
+  <!-- Three.js import map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.175.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.175.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  {% block scripts %}
+  <!-- 子テンプレートでThree.jsスクリプト等を読み込む場所 -->
+  {% endblock %}
+</body>
+</html>
