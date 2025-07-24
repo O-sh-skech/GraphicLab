@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -21,9 +22,16 @@
   <div>
     <h1>管理者としてログイン</h1>
     <form method="POST" action="/admin">
-      <input type="password" name="password" placeholder="パスワードを入力" required>
-      <button type="submit">ログイン</button>
+      <input name="username" type="text" placeholder="ユーザー名を入力" required>
     </form>
+
+    <form method="POST" action="/admin">
+      <input type="password" name="password" placeholder="パスワードを入力" required>
+    </form>
+    
+    <button type="submit">ログイン</button>
   </div>
+
+  <a href="/">戻る</a>
 </body>
 </html>

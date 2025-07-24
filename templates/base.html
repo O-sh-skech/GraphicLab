@@ -13,21 +13,16 @@
     <form method="POST" action="/download-pdf" style="display:inline;">
       <button id="btn-pdf" type="submit">PDF保存</button>
     </form>
-    <form method="GET" action="/log" style="display:inline;">
-      <button id="btn-log" type="submit">グラフログ表示</button>
-    </form>
-    <form method="GET" action="/feedback" style="display:inline;">
-      <button id="btn-feedback" type="submit">フィードバック送信</button>
-    </form>
     
   </div>
   <div class="menu-dropdown">
-    <button class="menu-icon" id="moreBtn">︙</button>
-    <div class="menu-content" id="dropdownMenu">
-      <a href="/admin/login">管理者ログイン</a>
+      <button class="menu-icon" id="moreBtn">︙</button>
+      <div class="menu-content" id="dropdownMenu">
+        <a href="/admin/login">管理者ログイン</a>
+        <a href="/feedback">フィードバック</a>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
 <script type="text/javascript" src="sample.js"></script>
 
