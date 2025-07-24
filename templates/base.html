@@ -7,6 +7,30 @@
   {% block head_extra %}{% endblock %}
 </head>
 <body>
+
+<nav class="top-menu">
+  <div class="menu-left">
+    <form method="POST" action="/download-pdf" style="display:inline;">
+      <button id="btn-pdf" type="submit">PDF保存</button>
+    </form>
+    <form method="GET" action="/log" style="display:inline;">
+      <button id="btn-log" type="submit">グラフログ表示</button>
+    </form>
+    <form method="GET" action="/feedback" style="display:inline;">
+      <button id="btn-feedback" type="submit">フィードバック送信</button>
+    </form>
+    
+  </div>
+  <div class="menu-dropdown">
+    <button class="menu-icon" id="moreBtn">︙</button>
+    <div class="menu-content" id="dropdownMenu">
+      <a href="/admin/login">管理者ログイン</a>
+    </div>
+  </div>
+</nav>
+
+<script type="text/javascript" src="sample.js"></script>
+
   <div class="layout">
     <form method="POST" action="{{ url_for('index') }}">
       <input type="text" id="functionInput" name="function_text" placeholder="f(x,y)=" value="{{ function_text or '' }}" />
@@ -72,9 +96,12 @@
     }
   }
   </script>
+  
+  <script type="text/javascript" src="static/authentic.js"></script>
 
   {% block scripts %}
   <!-- 子テンプレートでThree.jsスクリプト等を読み込む場所 -->
   {% endblock %}
+
 </body>
 </html>
