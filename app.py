@@ -12,7 +12,6 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
     if request.method == 'POST':
         # フォームから送信された関数を取得
         function_text =  request.form['function_text']
@@ -73,7 +72,7 @@ def admin():
         print("GETリクエストを受け取りました")
         return render_template('admin.html')
     else:
-        #フォームから取得したパスワードをハッシュ化して、データベースのハッシュ化パスワードと比較する処理
+        password = request.form.get('password')
         return "未実装" , 501
         
 if __name__ == '__main__':
