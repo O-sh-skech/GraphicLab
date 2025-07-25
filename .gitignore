@@ -1,6 +1,4 @@
-<<<<<<< HEAD:.gitignore
 __pycache__/
-=======
 # node_modules やログファイルなど
 node_modules/
 dist/
@@ -15,4 +13,3 @@ dist/
 *.tmp
 .idea/
 .vscode/
->>>>>>> 7e9fcf1 (アニメーション終了後にメッシュ表示):3DGraphicApp/.gitignore
