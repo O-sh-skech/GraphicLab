@@ -43,20 +43,13 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
     .floating-buttons {
       position: fixed;
       bottom: 20px;
-      right: 20px;
+      right: 10px;
       display: flex;
       flex-direction: row; /* 横並びに変更 */
       gap: 10px; /* ボタンの間隔 */
-      z-index: 10;
     }
 
     /* 各ボタンの共通スタイル */
     #pdfBtn, #feedbackBtn, #adminBtn {
       background-color: rgb(226, 143, 9);
-      color: black;
-      border: brack;
-      padding: 10px 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
