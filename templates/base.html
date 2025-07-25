@@ -39,8 +39,8 @@
     <button id="plotBtn" type="submit" formaction="{{ url_for('index') }}">ClickMe</button>
     <button id="animateBtn" type="submit" formaction="{{ url_for('animate') }}">PLAY ANIMATION</button>
     <div class="floating-buttons">
-    <button id="pdfBtn" type="submit" formaction="{{ url_for('save_pdf') }}">SAVE PDF</button>
-    <button id="feedbackBtn" type="submit" formaction="{{ url_for('submit_feedback') }}">FEED BACK</button>
+    <button id="pdfBtn"  onclick="saveCanvasAsPDF()">SAVE PDF</button>
+    <button id="feedbackBtn" type="submit"  formaction="{{ url_for('submit_feedback') }}">FEED BACK</button>
     </div>
   </form>
 </div>
@@ -65,6 +65,7 @@
     });
   </script>
 
+
   <!-- Three.js import map -->
   <script type="importmap">
   {
@@ -75,11 +76,29 @@
   }
   </script>
   
-  <script type="text/javascript" src="static/authentic.js"></script>
 
   {% block scripts %}
   <!-- 子テンプレートでThree.jsスクリプト等を読み込む場所 -->
   {% endblock %}
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script>
+    async function saveCanvasAsPDF() {
+      const { jsPDF } = window.jspdf;
+
+      const canvas = document.getElementById('three-canvas');
+      const imgData = canvas.toDataURL('image/png'); // Canvas → Base64 PNG
+
+      const pdf = new jsPDF({
+        orientation: "landscape",
+        unit: "px",
+        format: [canvas.width, canvas.height]
+      });
+
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+      pdf.save("canvas_output.pdf");
+    }
+  </script>
 
 </body>
 </html>

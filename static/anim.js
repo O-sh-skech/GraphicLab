@@ -20,8 +20,12 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
     sessionStorage.setItem("cameraPosition1", JSON.stringify({ x: pos.x, y: pos.y, z: pos.z }));
   });
 
-  const renderer = new THREE.WebGLRenderer({ canvas });
-  renderer.setClearColor(0x000000, 0); // 背景を透明に
+  const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    preserveDrawingBuffer: true  // ←これが重要
+  });
+  
+  renderer.setClearColor(0xE88A10, 1); 
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
   // カメラ操作
