@@ -1,6 +1,6 @@
 body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
     input[type="text"] {
-        background-color: rgb(241, 216, 231);
+        background-color: #f1d8e7;
     }
     .button-panel button {
       background-color: rgb(220, 141, 7);
@@ -35,11 +35,24 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       z-index: 10;  /* 他の要素より前面に */
     }
 
-    /* ---PDFで保存/feedback/管理者認証--- */
+    /* --- 右下に横並びボタンを固定配置 --- */
+    .floating-buttons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: row; /* 横並びに変更 */
+      gap: 10px; /* ボタンの間隔 */
+      z-index: 10;
+    }
+
+    /* 各ボタンの共通スタイル */
     #pdfBtn, #feedbackBtn, #adminBtn {
-      position: absolute;
-      right: 10px;  /* 右から10px */
-      
       background-color: rgb(226, 143, 9);
-      z-index: 10;  /* 他の要素より前面に */
+      color: black;
+      border: brack;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }

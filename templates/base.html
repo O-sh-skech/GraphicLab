@@ -44,9 +44,15 @@
     <form method="POST" action="{{ url_for('animate') }}">
         <button id="animateBtn" type="submit">PLAY ANIMATION</button>
     </form>
-
   </div>
 
+  <div class="floating-buttons">
+    <!-- PDF保存用ボタン -->
+    <button id="pdfBtn" onclick="location.href='{{ url_for('save_pdf') }}'">SAVE PDF</button>
+
+    <!-- フィードバック用ボタン　-->
+    <button id="feedbackBtn" onclick="location.href='{{ url_for('submit_feedback') }}'">FEED BACK</button>
+  </div>
   <!-- 描画用canvas -->
   <canvas id="three-canvas"></canvas>
 
