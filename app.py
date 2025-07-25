@@ -3,37 +3,48 @@ from flask import Flask, render_template, request, abort,redirect, url_for, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from CreateMesh import create_surface_mesh
+from CreateMesh import create_surface_mesh, reset_json_dir
 from sympy import sympify
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
+# グローバル変数
+latest_function_Text = ""
+message = ""
+reset_json_dir()
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    global latest_function_Text  # ← 追加！
+    global message
     if request.method == 'POST':
         # フォームから送信された関数を取得
         function_text =  request.form['function_text']
+        
         if not function_text:
             error = "入力が空です！"
-            return render_template('draw.html', function_text=function_text, error=error)
+            return render_template('draw.html', function_text="", error=error)
         # 値を保持
+        latest_function_Text = function_text
         create_surface_mesh(360,2,sympify(function_text))
         message = f"入力された関数: {function_text}"
-        return render_template('draw.html', function_text=function_text, message=message)
+        return render_template('draw.html', function_text=latest_function_Text, message=message)
     # GET時は直前の入力値を渡す（なければ空）
-    return render_template('draw.html', function_text="")
+    return render_template('draw.html', function_text=latest_function_Text, message=message)
 
 @app.route('/animate', methods=['POST'])
 def animate():
+    global latest_function_Text  # ← 追加！
     animation_path = os.path.join(app.static_folder, 'Json', 'animation.json')
 
     if not os.path.exists(animation_path):
         error = "アニメーションデータが見つかりませんでした。ClickMeを押して関数を送信してください。"
         return render_template('draw.html', error=error)
-
-    return render_template('anim.html')
+    #フォームから送信された関数を取得
+    message = f"入力された関数: {latest_function_Text}"
+    return render_template('anim.html', function_text=latest_function_Text, message=message)
 
 BASE_DIR = os.path.abspath("static/Json")
 
