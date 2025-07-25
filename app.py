@@ -2,13 +2,13 @@ import os
 from flask import Flask, render_template, request, abort,redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
+from flask_sqlalchemy import SQLAlchemy
 from CreateMesh import create_surface_mesh
 from sympy import sympify
 
 
 app = Flask(__name__)
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -25,7 +25,6 @@ def index():
     # GET時は直前の入力値を渡す（なければ空）
     return render_template('draw.html', function_text="")
 
-
 @app.route('/animate', methods=['POST'])
 def animate():
     animation_path = os.path.join(app.static_folder, 'Json', 'animation.json')
@@ -35,7 +34,6 @@ def animate():
         return render_template('draw.html', error=error)
 
     return render_template('anim.html')
-
 
 BASE_DIR = os.path.abspath("static/Json")
 
@@ -66,14 +64,36 @@ def delete_file():
         abort(404, "ファイルが見つかりません")
 
 #　管理者認証
-@app.route('/admin/login', methods=['GET','POST'])
+@app.route('/manager/login', methods=['GET','POST'])
 def admin():
     if request.method == 'GET':
         print("GETリクエストを受け取りました")
         return render_template('admin.html')
     else:
         password = request.form.get('password')
-        return "未実装" , 501
+        username = request.form.get('username')
+        if password == "データベースから参照したハッシュ化password" | username == "データベースから参照したusername":
+            print("ログイン成功")
+            return redirect('/manager/feedback')
         
+# フィードバック一覧
+@app.route('/manager/feedback', methods=['GET','POST'])
+def manage_feedback():
+    if request.method == 'GET':
+        print("フィードバック管理ページにアクセス")
+        return render_template('showFeedback.html')
+        
+# フィードバックの詳細ページ
+@app.route('/manager/feedback/<int:feedback_id>', methods=['GET'])
+def feedback_detail(feedback_id):
+    # ここでフィードバックの詳細を取得するロジックを追加
+    # 例: feedback = Feedback.query.get(feedback_id)
+    feedback = {"id": feedback_id, "content": "フィードバックの内容"}
+    return render_template('feedback_detail.html', feedback=feedback)
+
+
+# フィードバックを指定した条件でソート。項目,日付,評価でソート可能
+
+# フィードバックの検索
 if __name__ == '__main__':
     app.run(debug=True, port=5002)

@@ -35,84 +35,11 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       z-index: 10;  /* 他の要素より前面に */
     }
 
-    /* メニュー ---PDF保存/フィードバック送信/グラフログ表示/管理者認証--- */
-    nav.top-menu {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #333;
-      color: white;
-      padding: 10px 20px;
-    }
-
-    .menu-left {
-      display: flex;
-      gap: 10px;
-    }
-
-    .menu-left button {
-      background-color: #555;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-
-    .menu-left button:hover {
-      background-color: #777;
-    }
-
-    .menu-dropdown {
-      position: relative;
-    }
-
-    .menu-icon {
-      background: none;
-      border: none;
-      font-size: 20px;
-      color: white;
-      cursor: pointer;
-    }
-
-    .menu-content {
-      display: none;
+    /* ---PDFで保存/feedback/管理者認証--- */
+    #pdfBtn, #feedbackBtn, #adminBtn {
       position: absolute;
-      right: 0;
-      top: 36px;
-      background-color: white;
-      color: black;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      min-width: 160px;
-      z-index: 100;
-    }
-
-    .menu-content a {
-      display: block;
-      padding: 10px;
-      text-decoration: none;
-      color: black;
-    }
-
-    .menu-content a:hover {
-      background-color: #eee;
-    }
-
-    /* レスポンシブデザイン スマホで開いた時のメニュ表示を最適化 */
-    @media screen and (max-width: 600px) {
-      nav.top-menu {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .menu-left {
-        flex-direction: column;
-        gap: 5px;
-        width: 100%;
-      }
-
-      .menu-left button {
-        width: 100%;
-      }
+      right: 10px;  /* 右から10px */
+      
+      background-color: rgb(226, 143, 9);
+      z-index: 10;  /* 他の要素より前面に */
     }

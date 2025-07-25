@@ -11,4 +11,4 @@
     if (!e.target.closest('.menu-dropdown')) {
       dropdown.style.display = 'none';
     }
-  });z
+  });

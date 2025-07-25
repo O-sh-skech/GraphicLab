@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>フィードバックの管理</title>
+</head>
+<body>
+  <h2>フィードバック一覧</h2>
+  <!-- データベースからフィードバック情報を参照する↓-->
+  {% if feedbacks %}
+    <ul>
+      {% for feedback in feedbacks %}
+        <li>{{ feedback }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>まだフィードバックはありません。</p>
+  {% endif %}
+
+  <a href="/">戻る</a>
+</body>
+</html>
