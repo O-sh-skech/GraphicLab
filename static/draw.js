@@ -5,7 +5,7 @@ const { canvas, scene, camera, renderer, controls } = initThree("three-canvas", 
 
 // Three.js のレンダラーと canvas サイズを同期させる
 const resizeCanvas = () => {
-  const width = window.innerWidth * 0.8;  // 80vw 相当
+  const width = window.innerWidth * 0.7;  // 80vw 相当
   const height = window.innerHeight * 0.6; // 60vh 相当
 
   canvas.width = width;

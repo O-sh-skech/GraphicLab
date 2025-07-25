@@ -12,7 +12,7 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
     }
     /* 親要素に対して絶対配置で中央 */
     #three-canvas {
-        width: 80vw;    /* ビューポート幅の80% */
+        width: 70vw;    /* ビューポート幅の80% */
         height: 60vh; 
         background-color: rgb(232, 138, 16);
 
@@ -47,6 +47,7 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       display: flex;
       flex-direction: row; /* 横並びに変更 */
       gap: 10px; /* ボタンの間隔 */
+      z-index: 10;
     }
 
     /* 各ボタンの共通スタイル */
