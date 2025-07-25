@@ -34,13 +34,20 @@
       <button type="button" class="input-btn" data-insert="**">^</button>
       <button type="button" class="input-btn" data-insert="E">e</button>
     </div>
-
+    
     <!-- 送信ボタンは2つ -->
     <button id="plotBtn" type="submit" formaction="{{ url_for('index') }}">ClickMe</button>
     <button id="animateBtn" type="submit" formaction="{{ url_for('animate') }}">PLAY ANIMATION</button>
   </form>
-  </div>
+</div>
 
+  <div class="floating-buttons">
+    <!-- PDF保存用ボタン -->
+    <button id="pdfBtn" onclick="location.href='{{ url_for('save_pdf') }}'">SAVE PDF</button>
+
+    <!-- フィードバック用ボタン　-->
+    <button id="feedbackBtn" onclick="location.href='{{ url_for('submit_feedback') }}'">FEED BACK</button>
+  </div>
   <!-- 描画用canvas -->
   <canvas id="three-canvas"></canvas>
 
