@@ -11,40 +11,35 @@
 <script type="text/javascript" src="sample.js"></script>
 
   <div class="layout">
-    <form method="POST" action="{{ url_for('index') }}">
-      <input type="text" id="functionInput" name="function_text" placeholder="f(x,y)=" value="{{ function_text or '' }}" />
-      
-        {% block messages %}
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
+  <form method="POST" id="mainForm" action="{{ url_for('index') }}">
+    <input type="text" id="functionInput" name="function_text" placeholder="f(x,y)=" value="{{ function_text or '' }}" />
 
-        {% if message %}
-            <p>{{ message }}</p>
-        {% endif %}
-        {% endblock %}
+    {% block messages %}
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+    {% if message %}
+      <p>{{ message }}</p>
+    {% endif %}
+    {% endblock %}
 
-      <div class="button-panel">
-        <button type="button" class="input-btn" data-insert="x">x</button>
-        <button type="button" class="input-btn" data-insert="y">y</button>
-        <button type="button" class="input-btn" data-insert="+">+</button>
-        <button type="button" class="input-btn" data-insert="-">-</button>
-        <button type="button" class="input-btn" data-insert="*">×</button>
-        <button type="button" class="input-btn" data-insert="/">÷</button>
-        <button type="button" class="input-btn" data-insert="sqrt()">√</button>
-        <button type="button" class="input-btn" data-insert="**">^</button>
-        <button type="button" class="input-btn" data-insert="E">e</button>
-
-        <!-- ClickMe ボタン -->
-        <button id="plotBtn" type="submit">ClickMe</button>
-      </div>
-    </form>
-
-        <!-- アニメーション用ボタン -->
-    <form method="POST" action="{{ url_for('animate') }}">
-        <button id="animateBtn" type="submit">PLAY ANIMATION</button>
-    </form>
-  </div>
+    <div class="button-panel">
+      <button type="button" class="input-btn" data-insert="x">x</button>
+      <button type="button" class="input-btn" data-insert="y">y</button>
+      <button type="button" class="input-btn" data-insert="+">+</button>
+      <button type="button" class="input-btn" data-insert="-">-</button>
+      <button type="button" class="input-btn" data-insert="*">×</button>
+      <button type="button" class="input-btn" data-insert="/">÷</button>
+      <button type="button" class="input-btn" data-insert="sqrt()">√</button>
+      <button type="button" class="input-btn" data-insert="**">^</button>
+      <button type="button" class="input-btn" data-insert="E">e</button>
+    </div>
+    
+    <!-- 送信ボタンは2つ -->
+    <button id="plotBtn" type="submit" formaction="{{ url_for('index') }}">ClickMe</button>
+    <button id="animateBtn" type="submit" formaction="{{ url_for('animate') }}">PLAY ANIMATION</button>
+  </form>
+</div>
 
   <div class="floating-buttons">
     <!-- PDF保存用ボタン -->

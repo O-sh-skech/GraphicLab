@@ -27,6 +27,10 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       padding: 20px;
     }
 
+    #plotBtn {
+      position: relative;
+      background-color: rgb(226, 143, 9);
+    }
     /* PLAY ANIMATION ボタンだけ右上固定 */
     #animateBtn {
       position: absolute;
