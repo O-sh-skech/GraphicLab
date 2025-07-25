@@ -2,6 +2,7 @@ import math
 from FunctionSimpler import simpler
 import json
 import os
+import shutil
 from sympy import symbols
 
 def print_vector(vector):
@@ -97,6 +98,16 @@ def max_min_divider(zPos: float, size: int) -> float:
     else:
         zPos = min(zPos, size * 10**5)
     return zPos
+
+def reset_json_dir():
+    target_dir = "static/Json"
+
+    if os.path.exists(target_dir):
+        shutil.rmtree(target_dir)
+        print("Jsonディレクトリを削除しました")
+    
+    os.makedirs(target_dir)
+    print("Jsonディレクトリを再作成しました")
 
 def list_index_sum(lst):
     sumList = []
@@ -217,7 +228,7 @@ def calculate_surface_mesh(angle, size, functionText):
     return MeshCalculated(outerWall, innerWall, otherWall)
 
 def create_surface_mesh(angle, size, functionText):
-    meshGroup = []
+    reset_json_dir()
     foundMeshList = []
     foundMesh = TriangleMesh()
     materialMesh = calculate_surface_mesh(angle, size, functionText)
@@ -260,7 +271,7 @@ def create_surface_mesh(angle, size, functionText):
                     ])
                 lineIndex += wallSize
 
-
+       
         toJson(foundMesh.points,f"points_{inner}")#r方向のメッシュ切りが起こらない問題。
         toJson(foundMesh.texCoords,f"texCoords_{inner}")
         toJson(foundMesh.faces,f"faces_{inner}")

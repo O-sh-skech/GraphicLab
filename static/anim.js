@@ -6,7 +6,19 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
   const scene = new THREE.Scene();
 
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(0, 0, 3);
+  const savedPos = sessionStorage.getItem("cameraPosition0");
+
+  if (savedPos) {
+    const { x, y, z } = JSON.parse(savedPos);
+    camera.position.set(x, y, z);
+  } else {
+    camera.position.set(0, 0, 3); // 初回は初期位置
+  }
+  //カメラ位置の保存
+  window.addEventListener("beforeunload", () => {
+    const pos = camera.position;
+    sessionStorage.setItem("cameraPosition1", JSON.stringify({ x: pos.x, y: pos.y, z: pos.z }));
+  });
 
   const renderer = new THREE.WebGLRenderer({ canvas });
   renderer.setClearColor(0x000000, 0); // 背景を透明に
@@ -52,22 +64,19 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
         path.push(new THREE.Vector3(x, y, z));
       }
 
-    // 処理が成功したので不要ファイルを削除するfetchをここで実行する
-    fetch('/delete-file?name=static/Json/animation.json', { method: 'DELETE' })
-    .then(res => {
-      if (!res.ok) console.warn('ファイル削除失敗');
-    })
-    .catch(err => console.error('削除時のエラー:', err));
     
 
         let currentIndex = 0;
         let trailPoints = [];
         let trailLine = null;
         const speed = 1.2;
-
+        let hasLooped = false; 
 
         function animate() {
         requestAnimationFrame(animate);
+
+         // カメラ操作のスムーズさに必要
+        controls.update();  
 
         const target = path[currentIndex];
         const current = sphere.position;
@@ -79,6 +88,14 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
         if (dist < 0.01) {
           trailPoints.push(current.clone());
+
+            // 最後の点に到達したら遷移（1回だけ）
+            if (currentIndex === path.length - 1 && !hasLooped) {
+            hasLooped = true;
+            setTimeout(() => {
+              window.location.href = "/"; // draw.htmlを表示するルートに変更
+            }, 1000); // 少し遅延してから遷移（1秒後）
+          }
           currentIndex = (currentIndex + 1) % path.length;
         } else {
           current.x += dx * speed;

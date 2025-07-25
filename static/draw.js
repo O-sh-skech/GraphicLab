@@ -8,7 +8,19 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75, window.innerWidth / window.innerHeight, 0.1, 1000
 );
-camera.position.set(0, 0, 3);
+const savedPos = sessionStorage.getItem("cameraPosition1");
+
+if (savedPos) {
+  const { x, y, z } = JSON.parse(savedPos);
+  camera.position.set(x, y, z);
+} else {
+  camera.position.set(0, 0, 3); // 初回は初期位置
+}
+//カメラ位置の保存
+window.addEventListener("beforeunload", () => {
+  const pos = camera.position;
+  sessionStorage.setItem("cameraPosition0", JSON.stringify({ x: pos.x, y: pos.y, z: pos.z }));
+});
 
 const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setClearColor(0x000000, 0); // 背景を透明に
@@ -52,15 +64,7 @@ async function loadMeshes() {
         facesRes.json()
       ]);
 
-      const [res1, res2, res3] = await Promise.all([
-        fetch(`/delete-file?name=${pointPath}`, { method: 'DELETE' }),
-        fetch(`/delete-file?name=${texPath}`, { method: 'DELETE' }),
-        fetch(`/delete-file?name=${facePath}`, { method: 'DELETE' })
-      ]);
-
-      if (!res1.ok || !res2.ok || !res3.ok) {
-        console.warn("いずれかの削除に失敗しました");
-      }
+      
 
 
 
