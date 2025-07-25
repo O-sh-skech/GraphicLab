@@ -1,44 +1,26 @@
+import { initThree } from "./base.js";
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
+const { canvas, scene, camera, renderer, controls } = initThree("three-canvas", "cameraPosition0");
 
-// Canvas取得と基本設定
-const canvas = document.getElementById("three-canvas");
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75, window.innerWidth / window.innerHeight, 0.1, 1000
-);
-const savedPos = sessionStorage.getItem("cameraPosition1");
+// Three.js のレンダラーと canvas サイズを同期させる
+const resizeCanvas = () => {
+  const width = window.innerWidth * 0.8;  // 80vw 相当
+  const height = window.innerHeight * 0.6; // 60vh 相当
 
-if (savedPos) {
-  const { x, y, z } = JSON.parse(savedPos);
-  camera.position.set(x, y, z);
-} else {
-  camera.position.set(0, 0, 3); // 初回は初期位置
-}
-//カメラ位置の保存
-window.addEventListener("beforeunload", () => {
-  const pos = camera.position;
-  sessionStorage.setItem("cameraPosition0", JSON.stringify({ x: pos.x, y: pos.y, z: pos.z }));
-});
+  canvas.width = width;
+  canvas.height = height;
 
-const renderer = new THREE.WebGLRenderer({
-  canvas: canvas,
-  preserveDrawingBuffer: true  // ←これが重要
-});
+  renderer.setSize(width, height);
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+};
 
-renderer.setClearColor(0xE88A10, 1); // 背景を透明に
-renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+// 最初の描画時
+resizeCanvas();
 
-// カメラ操作
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-
-// 補助オブジェクト
-scene.add(new THREE.AxesHelper(20));
-scene.add(new THREE.GridHelper(20, 10));
-
-
+// ウィンドウサイズ変更時にも対応
+window.addEventListener('resize', resizeCanvas);
 
 // fetchでJSONデータ読み込み
 let i = 0;

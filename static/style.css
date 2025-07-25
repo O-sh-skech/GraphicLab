@@ -12,8 +12,8 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
     }
     /* 親要素に対して絶対配置で中央 */
     #three-canvas {
-      width: 700px;
-        height: 400px;
+        width: 80vw;    /* ビューポート幅の80% */
+        height: 60vh; 
         background-color: rgb(232, 138, 16);
 
         position: absolute;  /* 絶対配置 */
