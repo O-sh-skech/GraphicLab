@@ -1,5 +1,5 @@
 body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
-    input[type="text"] {
+    input[type="text"], input[type="password"] {
         background-color: #f1d8e7;
     }
     .button-panel button {
