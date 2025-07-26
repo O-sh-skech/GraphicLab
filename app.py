@@ -6,9 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from CreateMesh import create_surface_mesh, reset_json_dir
 from sympy import sympify
 
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
 # グローバル変数
 latest_function_Text = ""
@@ -73,6 +71,7 @@ def delete_file():
         return "Deleted", 200
     else:
         abort(404, "ファイルが見つかりません")
+        
 #フィードバック送信
 @app.route('/feedback', methods=['GET', 'POST'])
 def submit_feedback():
@@ -120,7 +119,7 @@ def admin():
 def manage_feedback():
     if request.method == 'GET':
         print("フィードバック管理ページにアクセス")
-        return render_template('showFeedback.html')
+        return render_template('manageFeedback.html')
         
 # フィードバックの詳細ページ
 @app.route('/manager/feedback/<int:feedback_id>', methods=['GET'])
@@ -130,8 +129,7 @@ def feedback_detail(feedback_id):
     feedback = {"id": feedback_id, "content": "フィードバックの内容"}
     return render_template('feedback_detail.html', feedback=feedback)
 
-
-# フィードバックを指定した条件でソート。項目,日付,評価でソート可能
+# フィードバックを指定した条件でソート。項目,日付でソート可能
 
 # フィードバックの検索
 if __name__ == '__main__':
