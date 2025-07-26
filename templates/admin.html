@@ -4,34 +4,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>管理者としてログイン</title>
-  <style>
-    .admin-form {
-      max-width: 300px;
-      margin: 100px auto;
-      text-align: center;
-    }
-    input, button {
-      display: block;
-      width: 100%;
-      margin-top: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>管理者認証</title>
 </head>
 <body>
-  <div>
-    <h1>管理者としてログイン</h1>
+  <div class="admin-auth-container">
+    <h1>Admin Login</h1>
     <form method="POST" action="/admin">
-      <input name="username" type="text" placeholder="ユーザー名を入力" required>
+      <input name="username" type="text" placeholder="管理者名を入力">
     </form>
 
     <form method="POST" action="/admin">
-      <input type="password" name="password" placeholder="パスワードを入力" required>
+      <input type="password" name="password" placeholder="パスワードを入力">
     </form>
     
-    <button type="submit">ログイン</button>
+    <form method="POST" action="/admin">
+      <button type="submit" class="LoginBtn">Login</button>
+    </form>
   </div>
 
-  <a href="/">戻る</a>
+  <!--　戻るボタン -->
+  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="history.back()">BackPrevious</button>
 </body>
 </html>
