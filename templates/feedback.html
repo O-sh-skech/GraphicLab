@@ -6,7 +6,6 @@
   <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-  <div>
     <h1>THANKS FOR YOUR FEEDBACK</h1>
     <h2>-We will use your feedback to make improvements-</h2>
 
@@ -42,8 +41,10 @@
       
         <!-- 送信ボタン -->
         <button type="submit" class="SendFeedBackBtn" formaction="{{ url_for('submit_feedback') }}">SendFeedBack</button>
+
+        <!-- 管理者認証ボタン-->
+        <button type="submit" class="AdminAuthBtn" formaction="{{ url_for('admin') }}">AdminAuth</button>
       </div>
     </form>
-  </div>
 </body>
 </html>
