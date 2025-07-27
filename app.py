@@ -9,7 +9,6 @@ from database.db.database import db
 from database.routes.function_routes import function_bp  # Blueprint
 from database.config import Config  # 設定クラス
 
-
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # 任意の長いランダムな文字列
 app.config.from_object(Config)
@@ -114,6 +113,7 @@ def delete_file():
         return "Deleted", 200
     else:
         abort(404, "ファイルが見つかりません")
+        
 #フィードバック送信
 @app.route('/feedback', methods=['GET', 'POST'])
 def submit_feedback():
@@ -161,7 +161,7 @@ def admin():
 def manage_feedback():
     if request.method == 'GET':
         print("フィードバック管理ページにアクセス")
-        return render_template('showFeedback.html')
+        return render_template('manageFeedback.html')
         
 # フィードバックの詳細ページ
 @app.route('/manager/feedback/<int:feedback_id>', methods=['GET'])
@@ -171,8 +171,7 @@ def feedback_detail(feedback_id):
     feedback = {"id": feedback_id, "content": "フィードバックの内容"}
     return render_template('feedback_detail.html', feedback=feedback)
 
-
-# フィードバックを指定した条件でソート。項目,日付,評価でソート可能
+# フィードバックを指定した条件でソート。項目,日付でソート可能
 
 # フィードバックの検索
 if __name__ == '__main__':

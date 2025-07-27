@@ -1,5 +1,5 @@
 body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
-    input[type="text"] {
+    input[type="text"], input[type="password"], input[type="file"] {
         background-color: #f1d8e7;
     }
     .button-panel button {
@@ -53,4 +53,98 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
     /* 各ボタンの共通スタイル */
     #pdfBtn, #feedbackBtn, #adminBtn ,#saveFuncBtn ,#historyBtn {
       background-color: rgb(226, 143, 9);
+    }
+
+/* feedbackページのスタイル */
+    h1, h2{
+      text-align: center;
+      color: rgb(226, 143, 9)
+    }
+
+    .feedback-form {
+      padding: 20px;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .feedback-form label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: rgb(226, 143, 9);
+    }
+
+    .feedback-form input[type="text"],
+    .feedback-form select,
+    .feedback-form input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
+
+    /* 内容 */
+    .message-box {
+      background-color: #304c5a;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 8px;
+    }
+
+    .message-box label {
+      color: rgb(226, 143, 9);
+      font-weight: bold;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .message-box textarea {
+      width: 100%;
+      height: 180px;
+      padding: 10px;
+      font-size: 1em;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      box-sizing: border-box;
+      background-color: #fddaea;
+    }
+
+    .BackPreviousBtn,
+    .SendFeedBackBtn,
+    .AdminAuthBtn,
+    .LoginBtn {
+      background-color: rgb(226, 143, 9);
+      color: #000000;
+      padding: 5px ;
+      cursor: pointer;
+      width: 100px
+      
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: flex-end; /* 右寄せ */
+      margin-top: 20px;
+      text-align: right;
+      gap: 10px; /* ボタンの間隔 */
+    }
+
+    .admin-auth-container {
+      max-width: 350px;
+      margin: 0 auto; /* 中央寄せ */
+      padding: 10px;
+    }
+
+    .admin-previousBtn {
+      display: flex;
+      justify-content: center; /* 中央寄せ */
+      margin-top: 20px;
+      position: fixed;
+      bottom: 20px;
+      right: 10px;
+      display: flex;
     }
