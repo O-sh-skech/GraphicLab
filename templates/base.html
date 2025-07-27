@@ -8,8 +8,6 @@
 </head>
 <body>
 
-<script type="text/javascript" src="sample.js"></script>
-
   <div class="layout">
   <form method="POST" id="mainForm" action="{{ url_for('index') }}">
     <input type="text" id="functionInput" name="function_text" placeholder="f(x,y)=" value="{{ function_text or '' }}" />
@@ -22,7 +20,6 @@
       <p>{{ message }}</p>
     {% endif %}
     {% endblock %}
-
     <div class="button-panel">
       <button type="button" class="input-btn" data-insert="x">x</button>
       <button type="button" class="input-btn" data-insert="y">y</button>
@@ -40,7 +37,7 @@
     <button id="animateBtn" type="submit" formaction="{{ url_for('animate') }}">PLAY ANIMATION</button>
     <div class="floating-buttons">
       <button id="pdfBtn" onclick="saveCanvasAsPDF()">SAVE PDF</button>
-      <button id="feedbackBtn" type="submit" formaction="{{ url_for('submit_feedback') }}">FEED BACK</button>
+      <button id="feedbackBtn" type="submit" formaction="{{ url_for('feedback.submit_feedback') }}">FEED BACK</button>
       <button id="saveFuncBtn" type="submit" formaction="{{ url_for('function.prepare_save') }}" formmethod="post">SAVE FUNCTION</button>
       <button id="historyBtn"  type="submit" formaction="{{ url_for('function.history') }}" formmethod="get">FUNCTION HISTORY</button>
     </div>

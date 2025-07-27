@@ -1,12 +1,11 @@
 import os
-from flask import Flask, render_template, request, abort,redirect, url_for, jsonify, flash,session
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, abort,redirect, session
 from CreateMesh import create_surface_mesh, reset_json_dir
 from sympy import sympify
 from database.db.database import db
 from database.routes.function_routes import function_bp  # Blueprint
+from database.routes.feedback_routes import feedback_bp  # Blueprint
+
 from database.config import Config  # 設定クラス
 
 app = Flask(__name__)
@@ -22,6 +21,7 @@ with app.app_context():
 
 # Blueprint の登録
 app.register_blueprint(function_bp)
+app.register_blueprint(feedback_bp)
 
 # グローバル変数
 latest_function_Text = ""
@@ -73,7 +73,6 @@ def index():
         
     return render_template('draw.html', function_text=latest_function_Text, message=message)
 
-
 @app.route('/animate', methods=['POST'])
 def animate():
     global latest_function_Text  # ← 追加！
@@ -114,35 +113,6 @@ def delete_file():
     else:
         abort(404, "ファイルが見つかりません")
         
-#フィードバック送信
-@app.route('/feedback', methods=['GET', 'POST'])
-def submit_feedback():
-    if request.method == 'POST':
-        feedback_text = request.form.get('feedback_text')
-        if not feedback_text:
-            error = "フィードバックが空です！"
-            return render_template('feedback.html', error=error)
-        
-        # ここでフィードバックをデータベースに保存するロジックを追加
-        # 例: new_feedback = Feedback(content=feedback_text)
-        # db.session.add(new_feedback)
-        # db.session.commit()
-        
-        message = "フィードバックが送信されました。ありがとうございます！"
-        return render_template('feedback.html', message=message)
-    
-    return render_template('feedback.html')
-
-# PDF保存 ---関数と生成したグラフの画面をPDFとして保存---
-@app.route('/save_pdf', methods=['GET'])
-def save_pdf():
-    # ここでPDF保存のロジックを追加
-    # 例: pdf_path = generate_pdf()
-    # return send_file(pdf_path, as_attachment=True)
-    
-    message = "PDFが保存されました。"
-    return render_template('save_pdf.html', message=message)
-
 #　管理者認証
 @app.route('/manager/login', methods=['GET','POST'])
 def admin():

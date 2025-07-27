@@ -55,7 +55,7 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       background-color: rgb(226, 143, 9);
     }
 
-/* feedbackページのスタイル */
+/* feedback,管理者ページのスタイル */
     h1, h2{
       text-align: center;
       color: rgb(226, 143, 9)
@@ -119,18 +119,10 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
     .LoginBtn {
       background-color: rgb(226, 143, 9);
       color: #000000;
-      padding: 5px ;
+      padding: 3px ;
       cursor: pointer;
       width: 100px
       
-    }
-
-    .button-group {
-      display: flex;
-      justify-content: flex-end; /* 右寄せ */
-      margin-top: 20px;
-      text-align: right;
-      gap: 10px; /* ボタンの間隔 */
     }
 
     .admin-auth-container {
@@ -147,4 +139,12 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       bottom: 20px;
       right: 10px;
       display: flex;
+    }
+
+    .auth-input {
+      width: 250px;     
+      height: 10px;       
+      font-size: 18px;      /* 文字サイズも大きく */
+      padding: 10px;
+      margin-bottom: 15px;  /* フォーム同士の間隔 */
     }

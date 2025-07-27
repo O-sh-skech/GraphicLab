@@ -10,20 +10,24 @@
 <body>
   <div class="admin-auth-container">
     <h1>Admin Login</h1>
-    <form method="POST" action="/admin">
-      <input name="username" type="text" placeholder="管理者名を入力">
-    </form>
-
-    <form method="POST" action="/admin">
-      <input type="password" name="password" placeholder="パスワードを入力">
-    </form>
-    
-    <form method="POST" action="/admin">
-      <button type="submit" class="LoginBtn">Login</button>
-    </form>
+    {% block messages %}
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% endif %}
+    {% if message %}
+      <p>{{ message }}</p>
+    {% endif %}
+    {% endblock %}
+    <div class="auth-input">
+      <form method="POST" action="/admin">
+        <input name="username" type="text" placeholder="管理者名を入力" class="auth-input">
+        <input type="password" name="password" placeholder="パスワードを入力" class="auth-input">
+        <button type="submit" class="LoginBtn">Login</button>
+      </form>
+    </div>
   </div>
 
   <!--　戻るボタン -->
-  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="history.back()">BackPrevious</button>
+  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ url_for('feedback.submit_feedback') }}'">BackPrevious</button>
 </body>
 </html>

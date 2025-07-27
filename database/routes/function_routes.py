@@ -1,7 +1,7 @@
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
-from flask import Blueprint, Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import  Blueprint, render_template, request, redirect, url_for, session, flash
 from database.models.function import Function  # モデルのインポート（必要に応じてパス変更）
 from database.db.database import db
 

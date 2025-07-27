@@ -8,42 +8,46 @@
 <body>
     <h1>THANKS FOR YOUR FEEDBACK</h1>
     <h2>-We will use your feedback to make improvements-</h2>
+    <form class="feedback-form" method="post" enctype="multipart/form-data">
+      <div class="message-box">
+        {% if error %}
+          <p class="error">{{ error }}</p>
+        {% endif %}
+        {% if message %}
+          <h2>{{ message }}</h2>
+        {% endif %}
+        <!-- 項目名 -->
+        <label for="category">項目名</label>
+        <select id="category" name="category">
+          <option value="">選択してください</option>
+          <option value="ui">UIについて</option>
+          <option value="bug">バグ報告</option>
+          <option value="request">機能リクエスト</option>
+          <option value="other">その他</option>
+        </select>
 
-      <form class="feedback-form" enctype="multipart/form-data">
-        
-        <div class="message-box">
-          <!-- 項目名 -->
-          <label for="category">項目名</label>
-          <select id="category" name="category">
-            <option value="">選択してください</option>
-            <option value="ui">UIについて</option>
-            <option value="bug">バグ報告</option>
-            <option value="request">機能リクエスト</option>
-            <option value="other">その他</option>
-          </select>
+        <!-- 件名 -->
+        <label for="title">件名</label>
+        <input type="text" id="title" name="title" placeholder="件名を入力してください" maxlength="20">
 
-          <!-- 件名 -->
-          <label for="subject">件名</label>
-          <input type="text" id="subject" name="subject" placeholder="件名を入力してください" maxlength="20">
+        <!-- 添付ファイル -->
+        <label for="attachment">添付ファイル</label>
+        <input type="file" id="file" name="file">
 
-          <!-- 添付ファイル -->
-          <label for="attachment">添付ファイル</label>
-          <input type="file" id="attachment" name="attachment">
+        <!-- 内容 -->
+        <label for="content"></label>
+        <textarea id="content" name="content" maxlength="200" placeholder="内容"></textarea>
+      </div>
 
-          <!-- 内容 -->
-          <label for="message"></label>
-          <textarea id="message" name="message" maxlength="200" placeholder="内容"></textarea>
-        </div>
+      <!-- 戻るボタン -->
+      <div class="floating-buttons">
+        <button type="button" class="BackPreviousBtn" onclick="window.location.href='{{ url_for('index') }}'">BackPrevious</button>
+      
+        <!-- フィードバックをデータベースに送信 -->
+        <button type="submit" class="SendFeedBackBtn" formaction="{{ url_for('feedback.submit_feedback') }}">SendFeedBack</button>
 
-        <!-- 戻るボタン -->
-        <div class="button-group">
-          <button type="button" class="BackPreviousBtn" onclick="history.back()">BackPrevious</button>
-        
-          <!-- 送信ボタン -->
-          <button type="submit" class="SendFeedBackBtn" formaction="{{ url_for('submit_feedback') }}">SendFeedBack</button>
-
-          <!-- 管理者認証ボタン-->
-          <button type="submit" class="AdminAuthBtn" formaction="{{ url_for('admin') }}">AdminAuth</button>
-      </form>
+        <!-- 管理者ログインページに遷移-->
+        <button type="button" class="AdminAuthBtn" onclick="window.location.href='{{ url_for('admin') }}'">AdminAuth</button>
+    </form>
 </body>
 </html>
