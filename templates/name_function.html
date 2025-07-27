@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>関数の保存</title>
+    <style>
+        body {
+            background-color: #1b2c33;
+            color: #fff;
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: #2e3f47;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #888;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            background-color: rgb(226, 143, 9);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: rgb(255, 160, 30);
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>関数に名前をつけて保存</h1>
+    <div class="form-container">
+        <form action="{{ url_for('function.save_function') }}" method="post">
+            <label for="function_name">保存名：</label>
+            <input type="text" id="function_name" name="function_name" required>
+            <!-- セッションから取得した関数式をhiddenで渡す -->
+            <input type="hidden" name="function_text" value="{{ function_text }}">
+            <button type="submit">保存</button>
+        </form>
+    </div>
+</body>
+</html>

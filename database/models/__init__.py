@@ -1,1 +1,1 @@
-from .fuction import Function
+from .function import Function

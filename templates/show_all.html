@@ -1,0 +1,125 @@
+<head>
+    <style>
+    body {
+        background-color: #1b2c33;
+        color: #fff;
+        font-family: sans-serif;
+    }
+
+    .function-header {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* ボタンとh1の間のスペース */
+    }
+
+    .button-group .btn {
+        font-size: 1.5rem;       /* 見た目の調整。32pxにしたいなら 2rem */
+        padding: 0.4em 0.8em;    /* 高さを稼ぐ */
+        height: 1.5em;           /* 明示的に高さを指定することでh1と揃える */
+        width: 3.5em;
+        line-height: 1;          /* テキストの中央寄せ */
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    /* ボタンホバー時の明るくする効果（全ボタン共通） */
+    .btn:hover {
+        filter: brightness(110%);
+    }
+
+    /* 緑の選択ボタン */
+    .select-btn {
+        background-color: #28a745;
+        color: white;
+    }
+
+    /* 赤の消去ボタン */
+    .delete-btn {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .function-card {
+        background-color: #2c3e50;
+        border: 2.5px solid rgb(226, 143, 9);
+        padding: 1em;
+        margin: 1em 0;
+        border-radius: 10px;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+
+    .function-card:hover {
+        background-color: #34495e;
+    }
+
+    /* 削除モードの赤枠 */
+    .delete-mode .function-card {
+        border-color: red;
+    }
+    </style>
+    <script>
+        let deleteMode = false;
+
+        function toggleDeleteMode() {
+            deleteMode = true;
+            document.body.classList.add('delete-mode');
+        }
+
+        function toggleSelectMode() {
+            deleteMode = false;
+            document.body.classList.remove('delete-mode');
+        }
+        
+         function selectFunction(funcId) {
+            if (deleteMode) {
+                const confirmed = confirm("この関数を削除しますか？");
+                if (confirmed) {
+                    fetch(`/delete_function/${funcId}`, {
+                        method: 'POST'
+                    }).then(response => {
+                        if (response.ok) {
+                            const card = document.querySelector(`[data-id='${funcId}']`);
+                            if (card) card.remove();
+                        } else {
+                            alert("削除に失敗しました。");
+                        }
+                    });
+                }
+            } else {
+                // 通常の選択動作
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{{ url_for('function.select_function') }}";
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'function_id';
+                input.value = funcId;
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="function-header">
+        <h1>関数一覧</h1>
+        <div class="button-group">
+            <button class="btn select-btn" onclick="toggleSelectMode()">選択</button>
+            <button class="btn delete-btn" onclick="toggleDeleteMode()">消去</button>
+        </div>
+    </div>
+
+    {% for func in functions %}
+    <div class="function-card" data-id="{{ func.id }}" onclick="selectFunction('{{ func.id }}')">
+        <p><strong>保存名：</strong> {{ func.name }}</p>
+        <p><strong>関数　：</strong> {{ func.expression }}</p>
+        <p><strong>日時　：</strong> {{ func.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    </div>
+    {% endfor %}
+</body>

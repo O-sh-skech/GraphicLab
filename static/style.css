@@ -51,6 +51,6 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
     }
 
     /* 各ボタンの共通スタイル */
-    #pdfBtn, #feedbackBtn, #adminBtn {
+    #pdfBtn, #feedbackBtn, #adminBtn ,#saveFuncBtn ,#historyBtn {
       background-color: rgb(226, 143, 9);
     }

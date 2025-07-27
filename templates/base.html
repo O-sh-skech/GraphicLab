@@ -39,11 +39,15 @@
     <button id="plotBtn" type="submit" formaction="{{ url_for('index') }}">ClickMe</button>
     <button id="animateBtn" type="submit" formaction="{{ url_for('animate') }}">PLAY ANIMATION</button>
     <div class="floating-buttons">
-    <button id="pdfBtn"  onclick="saveCanvasAsPDF()">SAVE PDF</button>
-    <button id="feedbackBtn" type="submit"  formaction="{{ url_for('submit_feedback') }}">FEED BACK</button>
+      <button id="pdfBtn" onclick="saveCanvasAsPDF()">SAVE PDF</button>
+      <button id="feedbackBtn" type="submit" formaction="{{ url_for('submit_feedback') }}">FEED BACK</button>
+      <button id="saveFuncBtn" type="submit" formaction="{{ url_for('function.prepare_save') }}" formmethod="post">SAVE FUNCTION</button>
+      <button id="historyBtn"  type="submit" formaction="{{ url_for('function.history') }}" formmethod="get">FUNCTION HISTORY</button>
     </div>
-  </form>
   </div>
+</div>
+
+</div>
 
 
   <!-- 描画用canvas -->
