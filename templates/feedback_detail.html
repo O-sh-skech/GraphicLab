@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>フィードバック詳細</title>
+</head>
+<body>
+  <h2>フィードバック詳細</h2>
+
+  {% if feedback %}
+    <p><strong>ID:</strong> {{ feedback.id }}</p>
+    <p><strong>カテゴリ:</strong> {{ feedback.category }}</p>
+    <p><strong>タイトル:</strong> {{ feedback.title }}</p>
+    <p><strong>内容:</strong><br>{{ feedback.content}}</p>
+    <p><strong>ステータス:</strong>
+      {% if feedback.status == 'confirmed' %}
+        確認済
+      {% else %}
+        保留中
+      {% endif %}
+    </p>
+    <p><strong>送信日:</strong> {{ feedback.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+
+    {% if feedback.file %}
+      <p><strong>添付ファイル:</strong>  
+        <a href="{{ url_for('static', filename=feedback.file) }}" download target="_blank">
+          {{ feedback.file.split('/')[-1] }} <!-- ファイル名を表示 -->
+        </a>
+      </p>
+    {% endif %}
+  {% else %}
+    <p>このフィードバックは存在しません。</p>
+  {% endif %}
+
+  <!-- 戻るボタン -->
+  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ url_for('feedback.manage_feedback') }}'">BackPrevious</button>
+</body>
+</html>

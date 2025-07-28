@@ -1,3 +1,5 @@
+# Pythonのキャッシュファイル
+*.pyc
 __pycache__/
 # node_modules やログファイルなど
 node_modules/

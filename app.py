@@ -5,6 +5,7 @@ from sympy import sympify
 from database.db.database import db
 from database.routes.function_routes import function_bp  # Blueprint
 from database.routes.feedback_routes import feedback_bp  # Blueprint
+from database.routes.admin_routes import admin_bp
 
 from database.config import Config  # 設定クラス
 
@@ -22,6 +23,7 @@ with app.app_context():
 # Blueprint の登録
 app.register_blueprint(function_bp)
 app.register_blueprint(feedback_bp)
+app.register_blueprint(admin_bp)
 
 # グローバル変数
 latest_function_Text = ""
@@ -126,23 +128,5 @@ def admin():
             print("ログイン成功")
             return redirect('/manager/feedback')
         
-# フィードバック一覧
-@app.route('/manager/feedback', methods=['GET','POST'])
-def manage_feedback():
-    if request.method == 'GET':
-        print("フィードバック管理ページにアクセス")
-        return render_template('manageFeedback.html')
-        
-# フィードバックの詳細ページ
-@app.route('/manager/feedback/<int:feedback_id>', methods=['GET'])
-def feedback_detail(feedback_id):
-    # ここでフィードバックの詳細を取得するロジックを追加
-    # 例: feedback = Feedback.query.get(feedback_id)
-    feedback = {"id": feedback_id, "content": "フィードバックの内容"}
-    return render_template('feedback_detail.html', feedback=feedback)
-
-# フィードバックを指定した条件でソート。項目,日付でソート可能
-
-# フィードバックの検索
 if __name__ == '__main__':
     app.run(debug=True, port=5002)

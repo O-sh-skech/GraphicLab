@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>フィードバックの管理</title>
+</head>
+<body>
+  <h2>フィードバック一覧</h2>
+
+  <!-- 検索・フィルター・ソートフォーム -->
+  <form method="POST" action="{{ url_for('feedback.manage_feedback') }}">
+    <input type="text" name="search_word" placeholder="検索ワード" value="{{ request.form.get('search_word', '') }}">
+
+    <select name="category">
+      <option value="">すべて</option>
+      <option value="ui" {% if request.form.get('category') == 'ui' %}selected{% endif %}>UIについて</option>
+      <option value="bug" {% if request.form.get('category') == 'bug' %}selected{% endif %}>バグ報告</option>
+      <option value="request" {% if request.form.get('category') == 'request' %}selected{% endif %}>機能リクエスト</option>
+      <option value="other" {% if request.form.get('category') == 'other' %}selected{% endif %}>その他</option>
+    </select>
+
+    <!-- ステータスのフィルター -->
+    <select name="status">
+      <option value="all" {% if request.form.get('status', 'all') == 'all' %}selected{% endif %}>すべて</option>
+      <option value="pending" {% if request.form.get('status') == 'pending' %}selected{% endif %}>保留中</option>
+      <option value="confirmed" {% if request.form.get('status') == 'confirmed' %}selected{% endif %}>確認済</option>
+    </select>
+
+
+    <!-- ソート条件 -->
+    <select name="sort">
+      <option value="newest" {% if request.form.get('sort') == 'newest' %}selected{% endif %}>新着順</option>
+      <option value="oldest" {% if request.form.get('sort') == 'oldest' %}selected{% endif %}>古い順</option>
+    </select>
+
+
+    <button type="submit" formaction="{{ url_for('feedback.manage_feedback') }}">検索</button>
+  </form>
+  <hr>
+
+  {% for feedback in feedbacks %}
+  <li>
+    <a href="{{ url_for('feedback.feedback_detail', feedback_id=feedback.id) }}">
+      <strong>[{{ feedback.id }}]</strong> {{ feedback.title }}
+    </a><br>
+
+    <!-- ステータス変更 -->
+    <form method="POST" action="{{ url_for('feedback.update_feedback_status', feedback_id=feedback.id) }}">
+      <select name="status">
+        <option value="pending" {% if feedback.status == 'pending' %}selected{% endif %}>保留中</option>
+        <option value="confirmed" {% if feedback.status == 'confirmed' %}selected{% endif %}>確認済</option>
+      </select>
+      <button type="submit">更新</button>
+    </form>
+
+    <!-- ステータスが confirmed のときだけ削除ボタンを表示 -->
+    {% if feedback.status == 'confirmed' %}
+      <form method="POST" action="{{ url_for('feedback.delete_feedback', feedback_id=feedback.id) }}" onsubmit="return confirm('本当に削除しますか？');">
+        <button type="submit">削除</button>
+      </form>
+    {% endif %}
+  </li>
+  {% endfor %}
+
+  <!--　戻るボタン -->
+  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ url_for('index') }}'">BackPrevious</button>
+
+</body>
+</html>

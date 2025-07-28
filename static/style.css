@@ -133,14 +133,26 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
 
     .BackPreviousBtn,
     .SendFeedBackBtn,
-    .AdminAuthBtn,
-    .LoginBtn {
+    .AdminAuthBtn {
       background-color: rgb(226, 143, 9);
       color: #000000;
       padding: 3px ;
       cursor: pointer;
-      width: 100px
-      
+      width: 100px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between; /* 端と端に分かれる */
+      width: 250px; /* ボタン2個分以上の幅を確保 */
+    }
+
+    .LoginBtn {
+      background-color: rgb(226, 143, 9);
+      color: #000000;
+      padding: 3px;
+      cursor: pointer;
+      width: 100px;
     }
 
     .admin-auth-container {
@@ -165,4 +177,37 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       font-size: 18px;      /* 文字サイズも大きく */
       padding: 10px;
       margin-bottom: 15px;  /* フォーム同士の間隔 */
+    }
+
+    /* フィードバックリスト */
+    li {
+      list-style: none;
+      margin-bottom: 20px;
+      padding: 15px;
+      background-color: #304c5a;
+      border-radius: 8px;
+    }
+
+    li a {
+      color: #fff;
+      font-size: 1.1em;
+      text-decoration: none;
+    }
+
+    li a:hover {
+      text-decoration: underline;
+    }
+
+    /* ステータスフォーム */
+    li form {
+      margin-top: 10px;
+    }
+
+    li select {
+      background-color: #fddaea;
+      color: #000;
+    }
+
+    strong {
+      color: rgb(226, 143, 9);
     }
