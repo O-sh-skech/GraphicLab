@@ -1,33 +1,43 @@
-
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <title>管理者認証</title>
 </head>
+
 <body>
   <div class="admin-auth-container">
     <h1>Admin Login</h1>
     {% block messages %}
     {% if error %}
-      <p class="error">{{ error }}</p>
+    <p class="error">{{ error }}</p>
     {% endif %}
     {% if message %}
-      <p>{{ message }}</p>
+    <p>{{ message }}</p>
     {% endif %}
     {% endblock %}
     <div class="auth-input">
       <form method="POST" action="/admin">
         <input name="username" type="text" placeholder="管理者名を入力" class="auth-input">
         <input type="password" name="password" placeholder="パスワードを入力" class="auth-input">
-        <button type="submit" class="LoginBtn">Login</button>
+        <div class="button-container">
+          <button type="submit" class="LoginBtn">Login</button>
+          {% set registration_url = url_for('admin.register_admin_auth') %}
+          <button type="button" class="LoginBtn" onclick="window.location.href='{{ registration_url }}'">
+            Registration
+          </button>
+        </div>
       </form>
     </div>
   </div>
 
   <!--　戻るボタン -->
-  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ url_for('feedback.submit_feedback') }}'">BackPrevious</button>
+  {% set back_url = url_for('feedback.submit_feedback') %}
+  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ back_url }}'">
+    BackPrevious
+  </button>
 </body>
 </html>

@@ -41,13 +41,19 @@
 
       <!-- 戻るボタン -->
       <div class="floating-buttons">
-        <button type="button" class="BackPreviousBtn" onclick="window.location.href='{{ url_for('index') }}'">BackPrevious</button>
+        {% set back_url = url_for('index') %}
+        <button type="button" class="BackPreviousBtn" onclick="window.location.href='{{ back_url }}'">
+          BackPrevious
+        </button>
       
         <!-- フィードバックをデータベースに送信 -->
         <button type="submit" class="SendFeedBackBtn" formaction="{{ url_for('feedback.submit_feedback') }}">SendFeedBack</button>
 
         <!-- 管理者ログインページに遷移-->
-        <button type="button" class="AdminAuthBtn" onclick="window.location.href='{{ url_for('admin') }}'">AdminAuth</button>
+        {% set admin_url = url_for('admin') %}
+        <button type="button" class="AdminAuthBtn" onclick="window.location.href='{{ admin_url }}'">
+          AdminAuth
+        </button>
     </form>
 </body>
 </html>

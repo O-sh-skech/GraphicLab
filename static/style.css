@@ -115,14 +115,26 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
 
     .BackPreviousBtn,
     .SendFeedBackBtn,
-    .AdminAuthBtn,
-    .LoginBtn {
+    .AdminAuthBtn {
       background-color: rgb(226, 143, 9);
       color: #000000;
       padding: 3px ;
       cursor: pointer;
-      width: 100px
-      
+      width: 100px;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: space-between; /* 端と端に分かれる */
+      width: 250px; /* ボタン2個分以上の幅を確保 */
+    }
+
+    .LoginBtn {
+      background-color: rgb(226, 143, 9);
+      color: #000000;
+      padding: 3px;
+      cursor: pointer;
+      width: 100px;
     }
 
     .admin-auth-container {

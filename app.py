@@ -5,6 +5,7 @@ from sympy import sympify
 from database.db.database import db
 from database.routes.function_routes import function_bp  # Blueprint
 from database.routes.feedback_routes import feedback_bp  # Blueprint
+from database.routes.admin_routes import admin_bp
 
 from database.config import Config  # 設定クラス
 
@@ -22,6 +23,7 @@ with app.app_context():
 # Blueprint の登録
 app.register_blueprint(function_bp)
 app.register_blueprint(feedback_bp)
+app.register_blueprint(admin_bp)
 
 # グローバル変数
 latest_function_Text = ""
