@@ -42,4 +42,21 @@ export function initThree(canvasId, cameraKey = "cameraPosition") {
   return { canvas, scene, camera, renderer, controls };
 }
 
+// ズーム処理の関数（カメラを前後に移動）
+export function zoom(delta, camera, controls) {
+  const direction = new THREE.Vector3();
+  direction.subVectors(camera.position, controls.target);
+
+  const length = direction.length();
+  const newLength = length + delta;
+
+  if (newLength > 0.1 && newLength < 100) {
+    direction.setLength(newLength);
+    camera.position.copy(controls.target).add(direction);
+  }
+
+  camera.updateProjectionMatrix();
+  controls.update();
+}
+
 

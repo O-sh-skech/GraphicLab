@@ -1,4 +1,5 @@
 import { initThree } from "./base.js";
+import { zoom } from './base.js';  
 import * as THREE from "three";
 
 const { canvas, scene, camera, renderer, controls } = initThree("three-canvas", "cameraPosition0");
@@ -119,4 +120,15 @@ const { canvas, scene, camera, renderer, controls } = initThree("three-canvas", 
     })
     .catch(err => {
       console.error("エラー:", err);
+    });
+
+    // イベントリスナー登録（ID指定で明確）
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("zoomInBtn").addEventListener("click", () => {
+        zoom(-1, camera, controls);
+      });
+    
+      document.getElementById("zoomOutBtn").addEventListener("click", () => {
+        zoom(1, camera, controls);
+      });
     });

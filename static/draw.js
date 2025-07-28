@@ -1,4 +1,5 @@
 import { initThree } from "./base.js";
+import { zoom } from './base.js';  
 import * as THREE from "three";
 
 const { canvas, scene, camera, renderer, controls } = initThree("three-canvas", "cameraPosition0");
@@ -98,19 +99,14 @@ scene.add(light);
 
     animate();
 
-// ズーム処理の関数（カメラを前後に移動）
-function zoom(delta) {
-  camera.position.z += delta;
-  camera.updateProjectionMatrix(); // 投影行列を更新
-}
 
 // イベントリスナー登録（ID指定で明確）
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("zoomInBtn").addEventListener("click", () => {
-    zoom(1);
+    zoom(-1, camera, controls);
   });
 
   document.getElementById("zoomOutBtn").addEventListener("click", () => {
-    zoom(-1);
+    zoom(1, camera, controls);
   });
 });
