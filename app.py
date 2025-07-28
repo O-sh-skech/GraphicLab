@@ -1,14 +1,27 @@
 import os
-from flask import Flask, render_template, request, abort,redirect, url_for, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, abort,redirect, session
 from CreateMesh import create_surface_mesh, reset_json_dir
 from sympy import sympify
+from database.db.database import db
+from database.routes.function_routes import function_bp  # Blueprint
+from database.routes.feedback_routes import feedback_bp  # Blueprint
 
-
+from database.config import Config  # 設定クラス
 
 app = Flask(__name__)
+app.secret_key = 'your-secret-key'  # 任意の長いランダムな文字列
+app.config.from_object(Config)
+
+# SQLAlchemy の初期化
+db.init_app(app)
+
+# アプリコンテキスト内でテーブル作成
+with app.app_context():
+    db.create_all()
+
+# Blueprint の登録
+app.register_blueprint(function_bp)
+app.register_blueprint(feedback_bp)
 
 # グローバル変数
 latest_function_Text = ""
@@ -17,21 +30,47 @@ reset_json_dir()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    global latest_function_Text  # ← 追加！
+    global latest_function_Text
     global message
+
     if request.method == 'POST':
+        # ▼▼▼【変更点】ここに関数呼び出しを追加 ▼▼▼
+        # 新しいファイルを生成する前に、古いファイルをすべて削除する
+        reset_json_dir()
+
         # フォームから送信された関数を取得
-        function_text =  request.form['function_text']
-        
+        function_text = request.form.get('function_text')
+
         if not function_text:
             error = "入力が空です！"
             return render_template('draw.html', function_text="", error=error)
-        # 値を保持
+        
+        #値を保持
         latest_function_Text = function_text
-        create_surface_mesh(360,10,sympify(function_text))
-        message = f"入力された関数: {function_text}"
+        try: # sympifyはエラーを出す可能性があるのでtry-exceptで囲むとより安全
+            create_surface_mesh(360, 2, sympify(function_text))
+            message = f"入力された関数: {function_text}"
+        except Exception as e:
+            message = f"関数の解析中にエラーが発生しました: {e}"
+            # エラー時も入力内容とメッセージは画面に返す
+            return render_template('draw.html', function_text=function_text, message=message)
+            
         return render_template('draw.html', function_text=latest_function_Text, message=message)
-    # GET時は直前の入力値を渡す（なければ空）
+    
+    # GETのときの処理は変更なし
+    selected_function = session.get('selected_function_text')
+    if selected_function:
+        # こちらも同様にリセットを入れると、より確実
+        reset_json_dir() 
+        latest_function_Text = selected_function
+        try:
+            create_surface_mesh(360, 2, sympify(selected_function))
+            message = f"保存された関数を選択: {selected_function}"
+        except Exception as e:
+            message = f"関数の解析中にエラーが発生しました: {e}"
+        # 一度使ったら削除しておく（好みに応じて）
+        session.pop('selected_function_text', None)
+        
     return render_template('draw.html', function_text=latest_function_Text, message=message)
 
 @app.route('/animate', methods=['POST'])
@@ -73,21 +112,7 @@ def delete_file():
         return "Deleted", 200
     else:
         abort(404, "ファイルが見つかりません")
-
-#フィードバック送信
-@app.route('/feedback', methods=['GET', 'POST'])
-def submit_feedback():
-    if request.method == 'POST':
-        feedback_text = request.form.get('feedback_text')
-        if not feedback_text:
-            error = "フィードバックが空です！"
-            return render_template('feedback.html', error=error)
-        message = "フィードバックが送信されました。ありがとうございます！"
-        return render_template('feedback.html', message=message)
-    
-    return render_template('feedback.html')
-
-
+        
 #　管理者認証
 @app.route('/manager/login', methods=['GET','POST'])
 def admin():
@@ -106,7 +131,7 @@ def admin():
 def manage_feedback():
     if request.method == 'GET':
         print("フィードバック管理ページにアクセス")
-        return render_template('showFeedback.html')
+        return render_template('manageFeedback.html')
         
 # フィードバックの詳細ページ
 @app.route('/manager/feedback/<int:feedback_id>', methods=['GET'])
@@ -116,8 +141,7 @@ def feedback_detail(feedback_id):
     feedback = {"id": feedback_id, "content": "フィードバックの内容"}
     return render_template('feedback_detail.html', feedback=feedback)
 
-
-# フィードバックを指定した条件でソート。項目,日付,評価でソート可能
+# フィードバックを指定した条件でソート。項目,日付でソート可能
 
 # フィードバックの検索
 if __name__ == '__main__':

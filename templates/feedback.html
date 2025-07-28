@@ -1,25 +1,53 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>フィードバック</title>
+  <title>Feedback</title>
+  <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-  <h1>フィードバックを送信</h1>
+    <h1>THANKS FOR YOUR FEEDBACK</h1>
+    <h2>-We will use your feedback to make improvements-</h2>
+    <form class="feedback-form" method="post" enctype="multipart/form-data">
+      <div class="message-box">
+        {% if error %}
+          <p class="error">{{ error }}</p>
+        {% endif %}
+        {% if message %}
+          <h2>{{ message }}</h2>
+        {% endif %}
+        <!-- 項目名 -->
+        <label for="category">項目名</label>
+        <select id="category" name="category">
+          <option value="">選択してください</option>
+          <option value="ui">UIについて</option>
+          <option value="bug">バグ報告</option>
+          <option value="request">機能リクエスト</option>
+          <option value="other">その他</option>
+        </select>
 
-  <form method="POST" action="{{ url_for('submit_feedback') }}">
-    <textarea name="feedback_text" rows="4" cols="40" placeholder="ご意見・ご感想をどうぞ"></textarea><br>
-    <button type="submit">送信</button>
-  </form>
-  <form method="GET" action="{{ url_for('manage_feedback') }}">
-    <button type="submit">フィードバック一覧へ</button>
-  </form>
+        <!-- 件名 -->
+        <label for="title">件名</label>
+        <input type="text" id="title" name="title" placeholder="件名を入力してください" maxlength="20">
 
-  {% if error %}
-    <p style="color: red;">{{ error }}</p>
-  {% endif %}
-  {% if message %}
-    <p style="color: green;">{{ message }}</p>
-  {% endif %}
+        <!-- 添付ファイル -->
+        <label for="attachment">添付ファイル</label>
+        <input type="file" id="file" name="file">
+
+        <!-- 内容 -->
+        <label for="content"></label>
+        <textarea id="content" name="content" maxlength="200" placeholder="内容"></textarea>
+      </div>
+
+      <!-- 戻るボタン -->
+      <div class="floating-buttons">
+        <button type="button" class="BackPreviousBtn" onclick="window.location.href='{{ url_for('index') }}'">BackPrevious</button>
+      
+        <!-- フィードバックをデータベースに送信 -->
+        <button type="submit" class="SendFeedBackBtn" formaction="{{ url_for('feedback.submit_feedback') }}">SendFeedBack</button>
+
+        <!-- 管理者ログインページに遷移-->
+        <button type="button" class="AdminAuthBtn" onclick="window.location.href='{{ url_for('admin') }}'">AdminAuth</button>
+    </form>
 </body>
 </html>

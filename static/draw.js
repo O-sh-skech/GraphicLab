@@ -27,9 +27,13 @@ let i = 0;
 
 async function loadMeshes() {
   while (true) {
-    const pointPath = `/static/Json/points_${i}.json`;
-    const texPath = `/static/Json/texCoords_${i}.json`;
-    const facePath = `/static/Json/faces_${i}.json`;
+    // ▼▼▼【変更点】キャッシュバスティング用のタイムスタンプを生成 ▼▼▼
+    const cacheBuster = new Date().getTime();
+
+    // ▼▼▼【変更点】各URLの末尾にタイムスタンプを付加 ▼▼▼
+    const pointPath = `/static/Json/points_${i}.json?_=${cacheBuster}`;
+    const texPath = `/static/Json/texCoords_${i}.json?_=${cacheBuster}`;
+    const facePath = `/static/Json/faces_${i}.json?_=${cacheBuster}`;
 
     try {
       const [pointsRes, texCoordsRes, facesRes] = await Promise.all([
@@ -40,7 +44,7 @@ async function loadMeshes() {
 
       // いずれかのファイルが存在しなければ終了
       if (!pointsRes.ok || !texCoordsRes.ok || !facesRes.ok){
-        console.warn("失敗")
+        console.warn("ファイル読み込みのループを終了します。")
         break;
       }
 
@@ -49,10 +53,6 @@ async function loadMeshes() {
         texCoordsRes.json(),
         facesRes.json()
       ]);
-
-      
-
-
 
       const geometry = new THREE.BufferGeometry();
       const vertices = new Float32Array(pointsData);
