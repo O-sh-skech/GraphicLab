@@ -7,8 +7,8 @@ from CreateMesh import create_surface_mesh, reset_json_dir
 from sympy import sympify
 
 
+
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 
 # グローバル変数
 latest_function_Text = ""
@@ -28,7 +28,7 @@ def index():
             return render_template('draw.html', function_text="", error=error)
         # 値を保持
         latest_function_Text = function_text
-        create_surface_mesh(360,2,sympify(function_text))
+        create_surface_mesh(360,10,sympify(function_text))
         message = f"入力された関数: {function_text}"
         return render_template('draw.html', function_text=latest_function_Text, message=message)
     # GET時は直前の入力値を渡す（なければ空）
@@ -73,6 +73,7 @@ def delete_file():
         return "Deleted", 200
     else:
         abort(404, "ファイルが見つかりません")
+
 #フィードバック送信
 @app.route('/feedback', methods=['GET', 'POST'])
 def submit_feedback():
@@ -81,26 +82,11 @@ def submit_feedback():
         if not feedback_text:
             error = "フィードバックが空です！"
             return render_template('feedback.html', error=error)
-        
-        # ここでフィードバックをデータベースに保存するロジックを追加
-        # 例: new_feedback = Feedback(content=feedback_text)
-        # db.session.add(new_feedback)
-        # db.session.commit()
-        
         message = "フィードバックが送信されました。ありがとうございます！"
         return render_template('feedback.html', message=message)
     
     return render_template('feedback.html')
 
-# PDF保存 ---関数と生成したグラフの画面をPDFとして保存---
-@app.route('/save_pdf', methods=['GET'])
-def save_pdf():
-    # ここでPDF保存のロジックを追加
-    # 例: pdf_path = generate_pdf()
-    # return send_file(pdf_path, as_attachment=True)
-    
-    message = "PDFが保存されました。"
-    return render_template('save_pdf.html', message=message)
 
 #　管理者認証
 @app.route('/manager/login', methods=['GET','POST'])

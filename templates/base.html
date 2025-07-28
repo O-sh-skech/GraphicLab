@@ -38,9 +38,9 @@
     <!-- 送信ボタンは2つ -->
     <button id="plotBtn" type="submit" formaction="{{ url_for('index') }}">ClickMe</button>
     <button id="animateBtn" type="submit" formaction="{{ url_for('animate') }}">PLAY ANIMATION</button>
-    <div class="floating-buttons">
-    <button id="pdfBtn"  onclick="saveCanvasAsPDF()">SAVE PDF</button>
-    <button id="feedbackBtn" type="submit"  formaction="{{ url_for('submit_feedback') }}">FEED BACK</button>
+    <div class = "floating-buttons">
+    <button id="pdfBtn"   onclick="saveCanvasAsPDF()" >SAVE PDF</button>
+    <button id="feedbackBtn" formaction="{{ url_for('submit_feedback') }}" formmethod="GET">FEED BACK</button>
     </div>
   </form>
   </div>
