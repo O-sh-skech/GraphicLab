@@ -48,7 +48,7 @@ def index():
         #値を保持
         latest_function_Text = function_text
         try: # sympifyはエラーを出す可能性があるのでtry-exceptで囲むとより安全
-            create_surface_mesh(360, 2, sympify(function_text))
+            create_surface_mesh(360, 6, sympify(function_text))
             message = f"入力された関数: {function_text}"
         except Exception as e:
             message = f"関数の解析中にエラーが発生しました: {e}"
@@ -64,7 +64,7 @@ def index():
         reset_json_dir() 
         latest_function_Text = selected_function
         try:
-            create_surface_mesh(360, 2, sympify(selected_function))
+            create_surface_mesh(360, 6, sympify(selected_function))
             message = f"保存された関数を選択: {selected_function}"
         except Exception as e:
             message = f"関数の解析中にエラーが発生しました: {e}"

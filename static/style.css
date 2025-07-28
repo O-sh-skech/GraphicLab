@@ -12,7 +12,7 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
     }
     /* 親要素に対して絶対配置で中央 */
     #three-canvas {
-        width: 70vw;    /* ビューポート幅の80% */
+        width: 70vw;    /* ビューポート幅の70% */
         height: 60vh; 
         background-color: rgb(232, 138, 16);
 
@@ -21,6 +21,7 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
         transform: translate(-50%, 0%); /* 自分の幅・高さの半分だけ戻す */
         display: block;
     }
+
 
     .layout {
       position: relative;
@@ -49,6 +50,23 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       gap: 10px; /* ボタンの間隔 */
       z-index: 10;
     }
+    .zoom-buttons {
+    position: absolute;
+    left: calc(50% + 35vw + 20px); /* three-canvasの左端50% + 半分の幅 + マージン */
+    top: 40%; /* 親要素に対して中央位置 */
+    flex-direction: column; /* 縦並び */
+  }
+  .zoom-buttons button{
+    background: transparent;
+    border: none;
+  }
+  .zoom-buttons button:active {
+  filter: brightness(70%);
+  }
+   
+  
+
+    
 
     /* 各ボタンの共通スタイル */
     #pdfBtn, #feedbackBtn, #adminBtn ,#saveFuncBtn ,#historyBtn {

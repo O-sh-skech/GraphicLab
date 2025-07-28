@@ -47,8 +47,21 @@
 </div>
 
 
-  <!-- 描画用canvas -->
-  <canvas id="three-canvas"></canvas>
+    <!-- コンテナ -->
+    <!-- 描画用 canvas -->
+    <canvas id="three-canvas" width="600" height="400" ></canvas>
+
+    <!-- ボタン群（縦並び） -->
+    <div class="zoom-buttons">
+      <button id="zoomInBtn" type="button">
+        <img src="{{ url_for('static', filename='images/zoomIn.png') }}">
+      </button>
+      <button id="zoomOutBtn" type="button">
+        <img src="{{ url_for('static', filename='images/zoomOut.png') }}">
+      </button>
+    </div>
+
+
 
   <!-- 入力補助用JS -->
   <script>
