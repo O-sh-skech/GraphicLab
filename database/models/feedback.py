@@ -12,6 +12,7 @@ class Feedback(db.Model):
     content = db.Column(db.Text, nullable=False)  # フィードバック内容
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(JST))  # 送信日時
     file = db.Column(db.String(255), nullable=True)  # 添付ファイルのパス
+    status = db.Column(db.String(20), default='pending') #　フィードバックのステータス pending (保留中), confirmed (確認済)
 
     def __str__(self):
         return f'<Feedback {self.id}: {self.category[:20]}...: {self.title[:20]}...: {self.created_at}>'

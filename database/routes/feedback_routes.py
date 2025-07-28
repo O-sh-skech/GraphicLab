@@ -56,3 +56,71 @@ def submit_feedback():
         return render_template('feedback.html', message=message)
 
     return render_template('feedback.html')
+
+'''
+フィードバックの表示(検索・フィルター機能付き)と管理が行えるページ。
+'''
+# フィードバック一覧ページ
+@feedback_bp.route('/manager/feedback', methods=['GET', 'POST'])
+def manage_feedback():
+    query = Feedback.query
+
+    if request.method == 'POST':
+        search_word = request.form.get('search_word')
+        category = request.form.get('category', '')
+        sort = request.form.get('sort', 'newest')
+        status = request.form.get('status', 'all')
+
+        if search_word:
+            query = query.filter(
+                Feedback.title.ilike(f"%{search_word}%") |
+                Feedback.content.ilike(f"%{search_word}%")
+            )
+
+        if category:
+            query = query.filter(Feedback.category == category)
+
+        if status != 'all':
+            query = query.filter(Feedback.status == status)
+
+        if sort == 'newest':
+            query = query.order_by(Feedback.created_at.desc())
+        elif sort == 'oldest':
+            query = query.order_by(Feedback.created_at.asc())
+        elif sort == 'status':
+            query = query.order_by(Feedback.status.asc())
+
+        feedbacks = query.all()
+        return render_template("manage_feedback.html", feedbacks=feedbacks)
+
+    feedbacks = Feedback.query.all()
+    return render_template('manage_feedback.html', feedbacks=feedbacks)
+
+
+# フィードバックの詳細ページ
+@feedback_bp.route('/manager/feedback/<int:feedback_id>', methods=['GET'])
+def feedback_detail(feedback_id):
+    feedback = Feedback.query.get(feedback_id)
+    return render_template('feedback_detail.html', feedback=feedback)
+        
+# 確認済のフィードバックを削除
+@feedback_bp.route('/manager/feedback/delete/<int:feedback_id>', methods=['POST'])
+def delete_feedback(feedback_id):
+    feedback = Feedback.query.get_or_404(feedback_id)
+    
+    if feedback.status == 'confirmed':
+        db.session.delete(feedback)
+        db.session.commit()
+        return redirect(url_for('feedback.manage_feedback'))
+    else:
+        return "このフィードバックは確認済ではないため削除できません", 403
+    
+# フィードバックのステータス更新
+@feedback_bp.route('/manager/feedback/<int:feedback_id>/update', methods=['POST'])
+def update_feedback_status(feedback_id):
+    feedback = Feedback.query.get_or_404(feedback_id)
+    new_status = request.form.get('status')
+    if new_status in ['pending', 'confirmed']:
+        feedback.status = new_status
+        db.session.commit()
+    return redirect(url_for('feedback.manage_feedback'))

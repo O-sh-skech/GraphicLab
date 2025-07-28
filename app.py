@@ -126,23 +126,5 @@ def admin():
             print("ログイン成功")
             return redirect('/manager/feedback')
         
-# フィードバック一覧
-@app.route('/manager/feedback', methods=['GET','POST'])
-def manage_feedback():
-    if request.method == 'GET':
-        print("フィードバック管理ページにアクセス")
-        return render_template('manageFeedback.html')
-        
-# フィードバックの詳細ページ
-@app.route('/manager/feedback/<int:feedback_id>', methods=['GET'])
-def feedback_detail(feedback_id):
-    # ここでフィードバックの詳細を取得するロジックを追加
-    # 例: feedback = Feedback.query.get(feedback_id)
-    feedback = {"id": feedback_id, "content": "フィードバックの内容"}
-    return render_template('feedback_detail.html', feedback=feedback)
-
-# フィードバックを指定した条件でソート。項目,日付でソート可能
-
-# フィードバックの検索
 if __name__ == '__main__':
     app.run(debug=True, port=5002)
