@@ -1,14 +1,14 @@
 from sympy import symbols, cos, sin, simplify, oo, zoo, nan
 from math import radians
 
-class FunctionSimpler:
-    def __init__(self, functionType, value):
+class FunctionSimpler:#シンプルにした結果とfunctiontypeを返す
+    def __init__(self, functionType, f_polar_simplified):
         self.functionType = functionType
-        self.value = value
+        self.f_polar_simplified = f_polar_simplified
 
     @property
-    def getValue(self):
-        return self.value
+    def getF_polar_simplified(self):
+        return self.f_polar_simplified
 
     @property
     def getFunctionType(self):
@@ -16,26 +16,28 @@ class FunctionSimpler:
     
 
     def __repr__(self):
-        return f"FunctionSimpler(type={self.functionType}, value={self.value})"
+        return f"FunctionSimpler(type={self.functionType}, value={self.f_polar_simplified})"
     
-def check_value(evaluated, functionType):
+def check_value(evaluated):
     # 発散・未定義チェック
     if evaluated in [oo, -oo, zoo] or evaluated.has(oo, zoo):
-        return FunctionSimpler(functionType, nan)
+        return nan
     
     try:
         # Python floatに変換して絶対値をチェック
         val = float(evaluated)
         THRESHOLD = 1e10  # 好きな閾値を設定
         if abs(val) > THRESHOLD:
-            return FunctionSimpler(functionType, nan)
+            return nan
     except (TypeError, ValueError):
         # floatに変換できない場合はそのまま返すかnanにするなど適宜対応
         pass
     
-    return FunctionSimpler(functionType, evaluated)
+    return evaluated
 
-def simpler(functionText, r, θ):
+
+
+def simpler(functionText):
     # 変数定義
     x, y, radius, theta = symbols('x y radius theta')
     # x, y を極座標に置換
@@ -56,7 +58,19 @@ def simpler(functionText, r, θ):
     else:
         functionType = -1  # 定数など、rもθも含まない
     
-    # ラジアン変換（θが度指定なら）
+    return FunctionSimpler(functionType, f_polar_simplified)
+
+def evaluate(f_polar_simplified,r,θ):#計算結果を返す
+    radius, theta = symbols('radius theta')
     θ_rad = radians(θ)
     evaluated = f_polar_simplified.subs({radius: r, theta: θ_rad}).evalf()
-    return check_value(evaluated, functionType)
+    return check_value(evaluated)
+
+'''
+def Domein(angle, size, functionText):#angleはθの終点sizeはrの終点
+    radius, theta = symbols('radius theta')
+    f=simpler(functionText)#極座標変換された関数
+    domain = continuous_domain(f, radians, S.Reals)
+    domain = continuous_domain(f, theta, S.Reals)
+    #範囲がa,♾️
+'''

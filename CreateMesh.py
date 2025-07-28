@@ -1,5 +1,5 @@
 import math
-from FunctionSimpler import simpler
+from FunctionSimpler import simpler, evaluate
 import json
 import os
 import shutil
@@ -119,25 +119,25 @@ def list_index_sum(lst):
         sumList.append(sum_val)
     return sumList
 
-def adjust_z_pos(r, θ, functionText, functionType, size, adjustR, adjustθ):
+def adjust_z_pos(r, θ, f_polar_simplified, functionType, size, adjustR, adjustθ):
     newR = r + 0.1 if adjustR else r
     newTheta = θ - 1 if adjustθ else θ
-    newZPos = max_min_divider(float(simpler(functionText, newR, newTheta).getValue), size)
+    newZPos = max_min_divider(float(evaluate(f_polar_simplified,newR,newTheta)), size)
     if math.isnan(newZPos):
         if functionType == 1:
-            return adjust_z_pos(newR, newTheta, functionText, functionType, size, True, False)
+            return adjust_z_pos(newR, newTheta, f_polar_simplified, functionType, size, True, False)
         if functionType == 2:
-            return adjust_z_pos(newR, newTheta, functionText, functionType, size, False, True)
+            return adjust_z_pos(newR, newTheta, f_polar_simplified, functionType, size, False, True)
         raise ValueError("zPos is NaN")
     return newZPos
 
-def shift_wall(r,newR, functionText, angle, size, wall, innerWall, outerWall):
+def shift_wall(r,newR, f_polar_simplified, angle, size, wall, innerWall, outerWall):
   #  print(newR)
     for θ in range(angle + 1):
         radian = math.radians(θ)
         xPos = (newR) * math.cos(radian)
         yPos = (newR) * math.sin(radian)
-        zPos = float(simpler(functionText, (newR), θ).getValue)
+        zPos = float(evaluate(f_polar_simplified,newR,θ))
         u = (newR) / size
         v = θ / angle
         xyzPos = [xPos, zPos, yPos, u, v, r, θ]
@@ -148,19 +148,19 @@ def shift_wall(r,newR, functionText, angle, size, wall, innerWall, outerWall):
     outerWall.append(CopyList(innerWall).getList)
     innerWall.clear()#配列の構造を守る
 
-def adjust_wall(r, functionText, angle, size):
+def adjust_wall(r, f_polar_simplified, angle, size):
     wall = []
     innerWall = []
     outerWall = []
     if r==0:
         newR = r + 0.2
         while newR < r + 1.0:
-            shift_wall(r,newR, functionText, angle, size, wall, innerWall, outerWall)
+            shift_wall(r,newR, f_polar_simplified, angle, size, wall, innerWall, outerWall)
             newR += 0.2
     else :
         newR = r - 0.2
         while newR > r - 1.0:
-            shift_wall(r,newR, functionText, angle, size, wall, innerWall, outerWall)
+            shift_wall(r,newR, f_polar_simplified, angle, size, wall, innerWall, outerWall)
             newR -= 0.2
     return outerWall
 
@@ -168,13 +168,15 @@ def adjust_wall(r, functionText, angle, size):
 
 
 def calculate_surface_mesh(angle, size, functionText):
-    functionType = simpler(functionText, 0, 0).getFunctionType
     outerWall = []
     innerWall = []
     wall = []
     wallSet = []
     otherWall = []
     isNaN = False
+    s = simpler(functionText)
+    f_polar_simplified = s.getF_polar_simplified
+    functionType = s.getFunctionType
 
     r = 0.0
     while r <= size:
@@ -184,21 +186,21 @@ def calculate_surface_mesh(angle, size, functionText):
             radian = math.radians(θ)
             xPos = r * math.cos(radian)
             yPos = r * math.sin(radian)
-            zPos = float(simpler(functionText, r, θ).getValue)
+            zPos = float(evaluate(f_polar_simplified,r,θ))
            
             u = r / size
             v = θ / angle
             try:
                 if math.isnan(zPos):
                     if functionType != 1 and (functionType != 2 or r != 0):
-                        zPos = adjust_z_pos(r, θ, functionText, functionType, size, False, True)
+                        zPos = adjust_z_pos(r, θ, f_polar_simplified, functionType, size, False, True)
                         raise ValueError("zPos is NaN")
                     elif functionType == 1:
                         if θ == 0:
                            # print("ここ")
-                            wallSet = adjust_wall(r, functionText, angle, size)
+                            wallSet = adjust_wall(r, f_polar_simplified, angle, size)
                           # print(f"wallSet length = {len(wallSet)}")
-                        zPos = adjust_z_pos(r, θ, functionText, functionType, size, True, False)#θが0の時も->+0.1と+0.2で補足が充実するはず
+                        zPos = adjust_z_pos(r, θ, f_polar_simplified, functionType, size, True, False)#θが0の時も->+0.1と+0.2で補足が充実するはず
             except ValueError:
                 isNaN = True
                 continue
@@ -282,7 +284,7 @@ def create_surface_mesh(angle, size, functionText):
     toJson(otherWall,"animation")
 
 #x, y = symbols('x y')
-#print(create_surface_mesh(90,1,1/(y**2+x**2)))
+#print(create_surface_mesh(360,1,x/y))
 
 
 
