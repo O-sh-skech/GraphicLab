@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, request, session, redirect, flash
-from werkzeug.security import generate_password_hash
+from flask import Blueprint, render_template, request, session, redirect, flash, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
 from database.models.admin import Admin  # モデルのインポート
 from database.db.database import db
+from database.models.feedback import Feedback  # モデルのインポート
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -41,3 +42,30 @@ def register_admin():
         return redirect('/manager/login')  # 登録後ログインページへ
 
     return render_template('register_admin.html')
+
+@admin_bp.route('/admin', methods=['GET', 'POST'])
+def admin():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        admin = Admin.query.filter_by(username=username).first()
+
+        if admin and check_password_hash(admin.password_hash, password):
+            session['admin_logged_in'] = True
+            return redirect(url_for('feedback.manage_feedback'))
+        else:
+            error = 'ユーザー名またはパスワードが間違っています'
+            return render_template('admin.html', error=error)
+
+    return render_template('admin.html')
+
+
+@admin_bp.route('/feedback/manage', methods=['GET', 'POST'])
+def manage_feedback():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin'))
+
+    # データベースからすべてのフィードバックを取得（例として全件）
+    feedback_list = Feedback.query.order_by(Feedback.created_at.desc()).all()
+
+    return render_template('manage_feedback.html', feedbacks=feedback_list)

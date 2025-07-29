@@ -65,7 +65,9 @@
   {% endfor %}
 
   <!--　戻るボタン -->
-  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ url_for('index') }}'">BackPrevious</button>
-
+  {% set back_url = url_for('index') %}
+  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ back_url }}'">
+    BackPrevious
+  </button>
 </body>
 </html>
