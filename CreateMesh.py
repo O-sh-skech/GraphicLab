@@ -1,292 +1,183 @@
 import math
 from FunctionSimpler import simpler, evaluate
-import json
-import os
-import shutil
+import json, os, shutil
 from sympy import symbols
 
-def print_vector(vector):
-  for i in vector:
-      print("全ての座標データ",i)
-
-# 下位クラスはそのまま
 class MeshCreated:
-    def __init__(self, meshGroup, otherWall):
-        self.meshGroup = meshGroup
-        self.otherWall = otherWall
-
+    def __init__(self, m, o): self.meshGroup, self.otherWall = m, o
     @property
-    def getMeshGroup(self):
-        return self.meshGroup
-
+    def getMeshGroup(self): return self.meshGroup
     @property
-    def getOtherWall(self):
-        return self.otherWall
+    def getOtherWall(self): return self.otherWall
 
 class MeshCalculated:
-    def __init__(self, outerWall, innerWall, otherWall):
-        self.outerWall = outerWall
-        self.innerWall = innerWall
-        self.otherWall = otherWall
-
+    def __init__(self, o, i, t, v, f): self.outerWall, self.innerWall, self.otherWall, self.verticalWall, self.functionType = o, i, t, v, f
     @property
-    def getOuterWall(self):
-        return self.outerWall
-
+    def getOuterWall(self): return self.outerWall
     @property
-    def getInnerWall(self):
-        return self.innerWall
-
+    def getInnerWall(self): return self.innerWall
     @property
-    def getOtherWall(self):
-        return self.otherWall
+    def getOtherWall(self): return self.otherWall
+    @property
+    def getVerticalWall(self): return self.verticalWall
+    @property
+    def getFunctionType(self): return self.functionType
 
 class Mesh:
-    def __init__(self, mesh, meshView):
-        self.mesh = mesh
-        self.meshView = meshView
-        self.otherWall = []
-
+    def __init__(self, m, v): self.mesh, self.meshView, self.otherWall = m, v, []
     @property
-    def getMesh(self):
-        return self.mesh
-
+    def getMesh(self): return self.mesh
     @property
-    def getMeshView(self):
-        return self.meshView
-
+    def getMeshView(self): return self.meshView
     @property
-    def getOtherWall(self):
-        return self.otherWall
+    def getOtherWall(self): return self.otherWall
 
 class TriangleMesh:
-    def __init__(self):
-        self.points = []
-        self.faces = []
-        self.texCoords = []
+    def __init__(self): self.points, self.faces, self.texCoords = [], [], []
 
-class MeshView:
-    pass
+class MeshView: pass
 
 class CopyList:
-    def __init__(self, lst):
-        self.list = lst.copy()
-
+    def __init__(self, l): self.list = l.copy()
     @property
-    def getList(self):
-        return self.list
-    
+    def getList(self): return self.list
 
-def flatten_vector(vector):
-    flat_list = []
-    for item in vector:
-        if isinstance(item, (list, tuple)):
-            flat_list.extend(flatten_vector(item))  # 再帰的に展開
-        else:
-            flat_list.append(item)
-    return flat_list
+def flatten_vector(v):
+    flat = []
+    for x in v:
+        flat.extend(flatten_vector(x)) if isinstance(x, (list, tuple)) else flat.append(x)
+    return flat
 
-def toJson(vector, filename):
-    flat = flatten_vector(vector)
-    filepath = os.path.join("static/Json", filename + ".json")
-    with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(flat, f, ensure_ascii=False, indent=2)
+def toJson(v, name):
+    with open(os.path.join("static/Json", name + ".json"), "w", encoding="utf-8") as f:
+        json.dump(flatten_vector(v), f, ensure_ascii=False, indent=2)
 
-def max_min_divider(zPos: float, size: int) -> float:
-    if zPos < 0:
-        zPos = max(zPos, -size * 10**5)
-    else:
-        zPos = min(zPos, size * 10**5)
-    return zPos
+def max_min_divider(z, s):
+    return max(z, -s*1e5) if z < 0 else min(z, s*1e5)
 
 def reset_json_dir():
-    target_dir = "static/Json"
+    d = "static/Json"
+    if os.path.exists(d): shutil.rmtree(d)
+    os.makedirs(d)
 
-    if os.path.exists(target_dir):
-        shutil.rmtree(target_dir)
-        print("Jsonディレクトリを削除しました")
-    
-    os.makedirs(target_dir)
-    print("Jsonディレクトリを再作成しました")
+def list_index_sum(l):
+    s, res = 0, []
+    for i in range(len(l)-1):
+        if len(l[i]) > 1:
+            s += len(l[i])
+            res.append(s)
+    return res
 
-def list_index_sum(lst):
-    sumList = []
-    sum_val = 0
-    for i in range(len(lst) - 1):
-        if len(lst[i]) <= 1:
-            continue
-        sum_val += len(lst[i])
-        sumList.append(sum_val)
-    return sumList
+def adjust_z_pos(r, t, f, ft, s, ar, at):
+    nr = r+0.1 if r==0 and ar else r-0.5 if ar else r
+    nt = t-1 if at else t
+    rad = math.radians(nt)
+    z = max_min_divider(float(evaluate(f, nr, nt)), s)
+    x, y = nr*math.cos(rad), nr*math.sin(rad)
+    if math.isnan(z):
+        return adjust_z_pos(nr, nt, f, ft, s, True, False) if ft==1 else adjust_z_pos(nr, nt, f, ft, s, False, True)
+    return [x, z, y]
 
-def adjust_z_pos(r, θ, f_polar_simplified, functionType, size, adjustR, adjustθ):
-    newR = r + 0.1 if adjustR else r
-    newTheta = θ - 1 if adjustθ else θ
-    newZPos = max_min_divider(float(evaluate(f_polar_simplified,newR,newTheta)), size)
-    if math.isnan(newZPos):
-        if functionType == 1:
-            return adjust_z_pos(newR, newTheta, f_polar_simplified, functionType, size, True, False)
-        if functionType == 2:
-            return adjust_z_pos(newR, newTheta, f_polar_simplified, functionType, size, False, True)
-        raise ValueError("zPos is NaN")
-    return newZPos
+def shift_wall(r, nr, f, a, s, w, i, o):
+    for t in range(a+1):
+        rad = math.radians(t)
+        x, y = nr*math.cos(rad), nr*math.sin(rad)
+        z = float(evaluate(f, nr, t))
+        w.append([x, z, y, nr/s, t/a, r, t])
+    i.append(CopyList(w).getList); w.clear()
+    o.append(CopyList(i).getList); i.clear()
 
-def shift_wall(r,newR, f_polar_simplified, angle, size, wall, innerWall, outerWall):
-  #  print(newR)
-    for θ in range(angle + 1):
-        radian = math.radians(θ)
-        xPos = (newR) * math.cos(radian)
-        yPos = (newR) * math.sin(radian)
-        zPos = float(evaluate(f_polar_simplified,newR,θ))
-        u = (newR) / size
-        v = θ / angle
-        xyzPos = [xPos, zPos, yPos, u, v, r, θ]
-        wall.append(xyzPos)
-    innerWall.append(CopyList(wall).getList)
-   # print(len(wall))
-    wall.clear()
-    outerWall.append(CopyList(innerWall).getList)
-    innerWall.clear()#配列の構造を守る
+def adjust_wall(r, f, a, s, out, inn):
+    w, i, o = [], [], []
+    nr = r + 0.2 if r==0 else r + 0.05 if out else r - 0.35
+    lim = r+1.0 if r==0 or out else r
+    step = 0.2 if r==0 or out else 0.1
+    while nr < lim:
+        shift_wall(r, nr, f, a, s, w, i, o)
+        nr += step
+    return o
 
-def adjust_wall(r, f_polar_simplified, angle, size):
-    wall = []
-    innerWall = []
-    outerWall = []
-    if r==0:
-        newR = r + 0.2
-        while newR < r + 1.0:
-            shift_wall(r,newR, f_polar_simplified, angle, size, wall, innerWall, outerWall)
-            newR += 0.2
-    else :
-        newR = r - 0.2
-        while newR > r - 1.0:
-            shift_wall(r,newR, f_polar_simplified, angle, size, wall, innerWall, outerWall)
-            newR -= 0.2
-    return outerWall
-
-
-
-
-def calculate_surface_mesh(angle, size, functionText):
-    outerWall = []
-    innerWall = []
-    wall = []
-    wallSet = []
-    otherWall = []
-    isNaN = False
-    s = simpler(functionText)
-    f_polar_simplified = s.getF_polar_simplified
-    functionType = s.getFunctionType
-
+def calculate_surface_mesh(a, s, func):
+    o, i, w, rList, setW, t, vW = [], [], [], [], [], [], []
+    sim = simpler(func)
+    f, ft = sim.getF_polar_simplified, sim.getFunctionType
     r = 0.0
-    while r <= size:
-       # print(r)
-        innerWall.clear()
-        for θ in range(angle + 1):
-            radian = math.radians(θ)
-            xPos = r * math.cos(radian)
-            yPos = r * math.sin(radian)
-            zPos = float(evaluate(f_polar_simplified,r,θ))
-           
-            u = r / size
-            v = θ / angle
+    while r <= s:
+        i.clear(); isNaN = False
+        for t_ in range(a+1):
+            rad = math.radians(t_)
+            x, y = r*math.cos(rad), r*math.sin(rad)
             try:
-                if math.isnan(zPos):
-                    if functionType != 1 and (functionType != 2 or r != 0):
-                        zPos = adjust_z_pos(r, θ, f_polar_simplified, functionType, size, False, True)
-                        raise ValueError("zPos is NaN")
-                    elif functionType == 1:
-                        if θ == 0:
-                           # print("ここ")
-                            wallSet = adjust_wall(r, f_polar_simplified, angle, size)
-                          # print(f"wallSet length = {len(wallSet)}")
-                        zPos = adjust_z_pos(r, θ, f_polar_simplified, functionType, size, True, False)#θが0の時も->+0.1と+0.2で補足が充実するはず
-            except ValueError:
-                isNaN = True
-                continue
+                z = float(evaluate(f, r, t_))
+                if math.isnan(z):
+                    if ft != 1 and (ft != 2 or r != 0):
+                        z = adjust_z_pos(r, t_, f, ft, s, False, True)[1]
+                        raise ValueError
+                    elif ft == 1:
+                        if t_ == 0:
+                            setW = adjust_wall(r, f, a, s, False, False)
+                            for _ in range(4): rList.append("NaN")
+                        pos = adjust_z_pos(r, t_, f, ft, s, True, False)
+                        x, z, y = pos[0], pos[1], pos[2]
+            except ValueError: isNaN = True; continue
             finally:
-                xyzPos = [xPos, zPos, yPos, u, v, r, θ]
-                if (r == 0 or r == 1 or r == 2) and θ <= angle:
-                    otherWall.append(xyzPos)
-                wall.append(xyzPos)
-               # print("現実",xyzPos[1])
-                if isNaN or θ == angle:
-                #    print("到達した")
-                    innerWall.append(CopyList(wall).getList)
-                  #  print(len(wall))
-                    wall.clear()
-                    isNaN = False
-        outerWall.append(CopyList(innerWall).getList)
-        if wallSet:
-                #+0.1を追加した後に+0.2を追加する。
-                print("補完された")
-                outerWall.extend(CopyList(wallSet).getList)
-                wallSet.clear()
-       # print(f"r = {r}, innerWall length = {len(innerWall)}")
-       # print(f"outerWall length = {len(outerWall)}")
+                pos = [x, z, y, r/s, t_/a, r, t_]
+                if r in [0,1,2]: w.append(pos)
+                t.append(pos)
+                if isNaN or t_ == a:
+                    rList.append(z)
+                    if r == s: vW.append(CopyList(rList).getList); rList.clear()
+                    i.append(CopyList(t).getList); t.clear(); isNaN = False
+        o.append(CopyList(i).getList)
+        if setW:
+            o.extend(CopyList(setW).getList); setW.clear()
+            if r != 0:
+                vW.append(CopyList(rList).getList); rList.clear()
+                setW = adjust_wall(r, f, a, s, True, False)
+                o.extend(CopyList(setW).getList); setW.clear()
+                for _ in range(4): rList.append("NaN")
         r += 1.0
+    return MeshCalculated(o, i, w, vW, ft)
 
-        
-    return MeshCalculated(outerWall, innerWall, otherWall)
-
-def create_surface_mesh(angle, size, functionText):
+def create_surface_mesh(a, s, func):
     reset_json_dir()
-    foundMeshList = []
-    foundMesh = TriangleMesh()
-    materialMesh = calculate_surface_mesh(angle, size, functionText)
-    outerWall = materialMesh.getOuterWall
-    #print(len(outerWall))
-    innerWall = materialMesh.getInnerWall
-    #print("innerwallは",len(innerWall[0])+len(innerWall[1]))
-    
-    otherWall = materialMesh.getOtherWall
-
-    for inner in range(len(innerWall)):
-        foundMeshList.clear()
-        for outer in range(len(outerWall)):
-            foundMeshList.append(outerWall[outer][inner])
-            #print_vector(foundMeshList)
-            #print(outer)
-        for i in range(len(foundMeshList)):
-            #print_vector(foundMeshList)
-            xyzPosList = foundMeshList[i]
-            if len(xyzPosList) <= 2:
-                continue
-            for xyzPos in xyzPosList:
-                foundMesh.points.append((xyzPos[0], xyzPos[1], xyzPos[2]))
-             #   print(xyzPos[1])
-                foundMesh.texCoords.append((xyzPos[3], xyzPos[4]))
-
-            wallSize = 0
-            if i + 1 < len(foundMeshList):
-                if len(foundMeshList[i]) <= len(foundMeshList[i + 1]):
-                    wallSize = len(foundMeshList[i])
-                else:
-                    wallSize = len(foundMeshList[i + 1])
-
-            lineIndex = 0
-            for listIndex in list_index_sum(foundMeshList):
-                for PosIndex in range(wallSize - 1):
-                    foundMesh.faces.extend([
-                        (PosIndex+lineIndex, PosIndex+listIndex, PosIndex+lineIndex+1),
-                        (PosIndex+lineIndex+1, PosIndex+listIndex, PosIndex+listIndex+1)
-                    ])
-                lineIndex += wallSize
-
-       
-        toJson(foundMesh.points,f"points_{inner}")#r方向のメッシュ切りが起こらない問題。
-        toJson(foundMesh.texCoords,f"texCoords_{inner}")
-        toJson(foundMesh.faces,f"faces_{inner}")
-
-        foundMesh.faces.clear()
-        foundMesh.texCoords.clear()
-        foundMesh.points.clear()
-    toJson(otherWall,"animation")
+    mesh = TriangleMesh()
+    calc = calculate_surface_mesh(a, s, func)
+    o, i, w, vW, ft = calc.getOuterWall, calc.getInnerWall, calc.getOtherWall, calc.getVerticalWall, calc.getFunctionType
+    if ft in [0, 2]:
+        for idx in range(len(i)):
+            temp = [o[j][idx] for j in range(len(o))]
+            for j in range(len(temp)):
+                p = temp[j]
+                if len(p) <= 2: continue
+                for pos in p: mesh.points.append((pos[0], pos[1], pos[2])); mesh.texCoords.append((pos[3], pos[4]))
+                wSize = min(len(p), len(temp[j+1])) if j+1 < len(temp) else 0
+                line = 0
+                for l in list_index_sum(temp):
+                    for k in range(wSize-1):
+                        mesh.faces += [(k+line, k+l, k+line+1), (k+line+1, k+l, k+l+1)]
+                    line += wSize
+            toJson(mesh.points,f"points_{idx}"); toJson(mesh.texCoords,f"texCoords_{idx}"); toJson(mesh.faces,f"faces_{idx}")
+            mesh.faces.clear(); mesh.texCoords.clear(); mesh.points.clear()
+        toJson(w, "animation")
+    if ft == 1:
+        n, ln = 0, 0
+        for v in vW:
+            for idx in range(len(i)):
+                temp = [o[j+ln][idx] for j in range(len(v))]; ln += len(v)
+                for j in range(len(temp)):
+                    p = temp[j]
+                    if len(p) <= 2: continue
+                    for pos in p: mesh.points.append((pos[0], pos[1], pos[2])); mesh.texCoords.append((pos[3], pos[4]))
+                    wSize = min(len(p), len(temp[j+1])) if j+1 < len(temp) else 0
+                    line = 0
+                    for l in list_index_sum(temp):
+                        for k in range(wSize-1):
+                            mesh.faces += [(k+line, k+l, k+line+1), (k+line+1, k+l, k+l+1)]
+                        line += wSize
+                toJson(mesh.points,f"points_{n}"); toJson(mesh.texCoords,f"texCoords_{n}"); toJson(mesh.faces,f"faces_{n}")
+                mesh.faces.clear(); mesh.texCoords.clear(); mesh.points.clear(); n += 1
+        toJson(w,"animation")
 
 #x, y = symbols('x y')
-#print(create_surface_mesh(360,1,x/y))
-
-
-
-
-
+#print(create_surface_mesh(360, 3, 1/(x**2+y**2-1)))
