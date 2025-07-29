@@ -4,6 +4,31 @@ from datetime import datetime
 
 JST = timezone('Asia/Tokyo')
 
+'''
+    __tablename__
+    実際のDBで使うテーブル名
+
+    id
+    フィードバックを一意に認識するためのid。自動で生成される
+    
+    category
+    項目名 -必須
+    
+    title
+    タイトル -必須
+    
+    content
+    内容 -必須
+    
+    created_at
+    フィードバックが作成された日時を自動で記録 
+    
+    file
+    static/uploadsに保存したスクリーンショット等ファイルのパス -任意
+
+    __str__
+    管理者ページなどでデバッグ・確認しやすくする文字列表示
+'''
 class Feedback(db.Model):
     __tablename__ = 'feedbacks'
     id = db.Column(db.Integer, primary_key=True)
@@ -16,17 +41,3 @@ class Feedback(db.Model):
 
     def __str__(self):
         return f'<Feedback {self.id}: {self.category[:20]}...: {self.title[:20]}...: {self.created_at}>'
-    
-    '''
-    __tablename__
-    実際のDBで使うテーブル名
-
-    content
-    フィードバックの内容を保存する
-
-    created_at
-    フィードバックが作成された日時を自動で記録
-
-    __str__
-    管理者ページなどでデバッグ・確認しやすくする文字列表示
-    '''

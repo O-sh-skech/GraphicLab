@@ -9,7 +9,7 @@
 <body>
   <h2>フィードバック一覧</h2>
 
-  <!-- 検索・フィルター・ソートフォーム -->
+  <!-- 検索・項目フィルター -->
   <form method="POST" action="{{ url_for('feedback.manage_feedback') }}">
     <input type="text" name="search_word" placeholder="検索ワード" value="{{ request.form.get('search_word', '') }}">
 
@@ -35,11 +35,12 @@
       <option value="oldest" {% if request.form.get('sort') == 'oldest' %}selected{% endif %}>古い順</option>
     </select>
 
-
+    <!-- 検索ボタン -->
     <button type="submit" formaction="{{ url_for('feedback.manage_feedback') }}">検索</button>
   </form>
   <hr>
 
+  <!-- ステータス変更/削除機能付きで各フィードバックを表示。各フィードバックのリンクから詳細ページに遷移可能-->
   {% for feedback in feedbacks %}
   <li>
     <a href="{{ url_for('feedback.feedback_detail', feedback_id=feedback.id) }}">
@@ -65,7 +66,9 @@
   {% endfor %}
 
   <!--　戻るボタン -->
-  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ url_for('index') }}'">BackPrevious</button>
-
+  {% set back_url = url_for('index') %}
+  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ back_url }}'">
+    BackPrevious
+  </button>
 </body>
 </html>

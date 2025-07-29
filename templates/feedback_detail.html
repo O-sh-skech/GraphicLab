@@ -25,7 +25,8 @@
     {% if feedback.file %}
       <p><strong>添付ファイル:</strong>  
         <a href="{{ url_for('static', filename=feedback.file) }}" download target="_blank">
-          {{ feedback.file.split('/')[-1] }} <!-- ファイル名を表示 -->
+          <!-- 拡張子を無視してファイル名のみを表示 -->
+          {{ feedback.file.split('/')[-1] }} 
         </a>
       </p>
     {% endif %}
@@ -34,6 +35,8 @@
   {% endif %}
 
   <!-- 戻るボタン -->
-  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ url_for('feedback.manage_feedback') }}'">BackPrevious</button>
+  <button type="button" class="BackPreviousBtn admin-previousBtn"onclick="window.location.href='{{ url_for('feedback.manage_feedback') }}'">
+    BackPrevious
+  </button>
 </body>
 </html>
