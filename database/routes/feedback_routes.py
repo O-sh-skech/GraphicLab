@@ -1,12 +1,20 @@
-from flask import  Blueprint, render_template, request, redirect, url_for
-from database.models.feedback import Feedback  # モデルのインポート
-from database.db.database import db
-from werkzeug.utils import secure_filename
+# 標準ライブラリ
 import os
 
-upload_folder = 'static/uploads'  # アップロード先のフォルダ
+# サードパーティライブラリ
+from flask import Blueprint, render_template, request, redirect, url_for
+from werkzeug.utils import secure_filename
+
+# 自作モジュール
+from database.models.feedback import Feedback
+from database.db.database import db
+
+
+upload_folder = 'static/uploads'  # ファイルのアップロード先のフォルダ
+
 feedback_bp = Blueprint('feedback', __name__)
 
+#フィードバックの送信
 @feedback_bp.route('/feedback', methods=['GET', 'POST'])
 def submit_feedback():
     if request.method == 'POST':
@@ -15,8 +23,15 @@ def submit_feedback():
         content = request.form.get('content')
         file = request.files.get('file')
 
+        errors = []
+        if not category:
+            errors.append("項目を選択してください")
+        if not title:
+            errors.append("件名を5文字以上で入力してください")
+        if not content:
+            errors.append("内容を10文字以上で入力してください")
         if not category or not title or not content:
-            error = "項目, タイトル、内容は必須です!"
+            error = "項目, 件名、内容は必須です!"
             return render_template('feedback.html', error=error)
 
         if file:
@@ -57,10 +72,7 @@ def submit_feedback():
 
     return render_template('feedback.html')
 
-'''
-フィードバックの表示(検索・フィルター機能付き)と管理が行えるページ。
-'''
-# フィードバック一覧ページ
+# フィードバック一覧と検索/フィルター/ソート(日付)
 @feedback_bp.route('/manager/feedback', methods=['GET', 'POST'])
 def manage_feedback():
     query = Feedback.query
@@ -97,13 +109,23 @@ def manage_feedback():
     return render_template('manage_feedback.html', feedbacks=feedbacks)
 
 
-# フィードバックの詳細ページ
+# フィードバックの詳細
 @feedback_bp.route('/manager/feedback/<int:feedback_id>', methods=['GET'])
 def feedback_detail(feedback_id):
     feedback = Feedback.query.get(feedback_id)
     return render_template('feedback_detail.html', feedback=feedback)
         
-# 確認済のフィードバックを削除
+# フィードバックのステータス(保留/確認済)を更新
+@feedback_bp.route('/manager/feedback/<int:feedback_id>/update', methods=['POST'])
+def update_feedback_status(feedback_id):
+    feedback = Feedback.query.get_or_404(feedback_id)
+    new_status = request.form.get('status')
+    if new_status in ['pending', 'confirmed']:
+        feedback.status = new_status
+        db.session.commit()
+    return redirect(url_for('feedback.manage_feedback'))
+
+# 指定した確認済のフィードバックを削除
 @feedback_bp.route('/manager/feedback/delete/<int:feedback_id>', methods=['POST'])
 def delete_feedback(feedback_id):
     feedback = Feedback.query.get_or_404(feedback_id)
@@ -114,13 +136,3 @@ def delete_feedback(feedback_id):
         return redirect(url_for('feedback.manage_feedback'))
     else:
         return "このフィードバックは確認済ではないため削除できません", 403
-    
-# フィードバックのステータス更新
-@feedback_bp.route('/manager/feedback/<int:feedback_id>/update', methods=['POST'])
-def update_feedback_status(feedback_id):
-    feedback = Feedback.query.get_or_404(feedback_id)
-    new_status = request.form.get('status')
-    if new_status in ['pending', 'confirmed']:
-        feedback.status = new_status
-        db.session.commit()
-    return redirect(url_for('feedback.manage_feedback'))

@@ -1,17 +1,28 @@
+# 標準ライブラリ
 import os
-from flask import Flask, render_template, request, abort,redirect, session
-from CreateMesh import create_surface_mesh, reset_json_dir
+
+# サードパーティライブラリ
+from flask import Flask, render_template, request, abort, redirect, session
 from sympy import sympify
+
+# 自作モジュール（ローカル）
+from CreateMesh import create_surface_mesh, reset_json_dir
+
+# 設定・DB関連
+from database.config import Config
 from database.db.database import db
-from database.routes.function_routes import function_bp  # Blueprint
-from database.routes.feedback_routes import feedback_bp  # Blueprint
+
+# ルーティング（Blueprint）
+from database.routes.function_routes import function_bp
+from database.routes.feedback_routes import feedback_bp
 from database.routes.admin_routes import admin_bp
 
-from database.config import Config  # 設定クラス
+# 設定クラス
+from database.config import Config 
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # 任意の長いランダムな文字列
-app.config.from_object(Config)
+app.config.from_object(Config) # configを読み込む
 
 # SQLAlchemy の初期化
 db.init_app(app)
@@ -114,19 +125,6 @@ def delete_file():
         return "Deleted", 200
     else:
         abort(404, "ファイルが見つかりません")
-        
-#　管理者認証
-@app.route('/manager/login', methods=['GET','POST'])
-def admin():
-    if request.method == 'GET':
-        print("GETリクエストを受け取りました")
-        return render_template('admin.html')
-    else:
-        password = request.form.get('password')
-        username = request.form.get('username')
-        if password == "データベースから参照したハッシュ化password" | username == "データベースから参照したusername":
-            print("ログイン成功")
-            return redirect('/manager/feedback')
         
 if __name__ == '__main__':
     app.run(debug=True, port=5002)
