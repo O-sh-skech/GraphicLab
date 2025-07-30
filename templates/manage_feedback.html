@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <title>フィードバックの管理</title>
+  <title>Manage Feedback</title>
 </head>
 <body>
-  <h2>フィードバック一覧</h2>
+  <h2>Feedback Manager</h2>
 
   <!-- 検索・項目フィルター -->
   <form method="POST" action="{{ url_for('feedback.manage_feedback') }}">
@@ -67,7 +67,7 @@
 
   <!--　戻るボタン -->
   {% set back_url = url_for('index') %}
-  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ back_url }}'">
+  <button type="button" class="BackPreviousBtn floating-buttons" onclick="window.location.href='{{ back_url }}'">
     BackPrevious
   </button>
 </body>

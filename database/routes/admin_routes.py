@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, session, redirect, flash, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
-from database.models.admin import Admin  # モデルのインポート
+
 from database.db.database import db
-from database.models.feedback import Feedback  # モデルのインポート
+from database.models.admin import Admin
+from database.models.feedback import Feedback
+
 
 admin_bp = Blueprint('admin', __name__)
 

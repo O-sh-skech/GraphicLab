@@ -5,12 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-  <title>管理者認証</title>
+  <title>Admin Auth</title>
 </head>
 
 <body>
-  <div class="admin-auth-container">
-    <h1>Admin Login</h1>
+  <div class="admin-auth-wrapper">
+    <h1>Admin Login 　</h1>
     {% block messages %}
     {% if error %}
     <p class="error">{{ error }}</p>
@@ -21,15 +21,15 @@
     {% endblock %}
     <div class="auth-input">
       <form method="POST">
-        <input name="username" type="text" placeholder="管理者名を入力" class="auth-input">
-        <input type="password" name="password" placeholder="パスワードを入力" class="auth-input">
+        <input name="username" type="text" placeholder="管理者名を入力" class="auth-input" required>
+        <input type="password" name="password" placeholder="パスワードを入力" class="auth-input" required>
         <div class="button-container">
-        <button type="submit" class="LoginBtn" formaction="{{ url_for('admin.admin') }}">Login</button>
+          <button type="submit" class="LoginBtn" formaction="{{ url_for('admin.admin') }}">Login</button>
 
-        {% set registration_url = url_for('admin.register_admin_auth') %}
-        <button type="button" class="LoginBtn" onclick="window.location.href='{{ registration_url }}'">
-          Registration
-        </button>
+          {% set registration_url = url_for('admin.register_admin_auth') %}
+          <button type="button" class="Registration" onclick="window.location.href='{{ registration_url }}'">
+            Registration
+          </button>
         </div>
       </form>
     </div>
@@ -37,7 +37,7 @@
 
   <!--　戻るボタン -->
   {% set back_url = url_for('feedback.submit_feedback') %}
-  <button type="button" class="BackPreviousBtn admin-previousBtn" onclick="window.location.href='{{ back_url }}'">
+  <button type="button" class="BackPreviousBtn  floating-buttons" onclick="window.location.href='{{ back_url }}'">
     BackPrevious
   </button>
 </body>
