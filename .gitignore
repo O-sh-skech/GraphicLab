@@ -16,3 +16,4 @@ dist/
 .idea/
 .vscode/
 database/db/database.db
+static/uploads/
