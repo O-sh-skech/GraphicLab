@@ -47,7 +47,7 @@
         <button type="submit" class="SendFeedBackBtn" formaction="{{ url_for('feedback.submit_feedback') }}">SendFeedBack</button>
 
         <!-- 管理者ログインページに遷移-->
-        {% set admin_url = url_for('admin') %}
+         {% set admin_url = url_for('admin.admin') %}
         <button type="button" class="AdminAuthBtn" onclick="window.location.href='{{ admin_url }}'">
           AdminAuth
         </button>

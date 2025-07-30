@@ -20,15 +20,16 @@
     {% endif %}
     {% endblock %}
     <div class="auth-input">
-      <form method="POST" action="/admin">
+      <form method="POST">
         <input name="username" type="text" placeholder="管理者名を入力" class="auth-input">
         <input type="password" name="password" placeholder="パスワードを入力" class="auth-input">
         <div class="button-container">
-          <button type="submit" class="LoginBtn">Login</button>
-          {% set registration_url = url_for('admin.register_admin_auth') %}
-          <button type="button" class="LoginBtn" onclick="window.location.href='{{ registration_url }}'">
-            Registration
-          </button>
+        <button type="submit" class="LoginBtn" formaction="{{ url_for('admin.admin') }}">Login</button>
+
+        {% set registration_url = url_for('admin.register_admin_auth') %}
+        <button type="button" class="LoginBtn" onclick="window.location.href='{{ registration_url }}'">
+          Registration
+        </button>
         </div>
       </form>
     </div>

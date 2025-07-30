@@ -6,19 +6,19 @@ from database.models.feedback import Feedback  # モデルのインポート
 
 admin_bp = Blueprint('admin', __name__)
 
-@admin_bp.route('/register_admin_auth')
+@admin_bp.route('/register_admin_auth', methods=['POST','GET'])
 def register_admin_auth():
-    return render_template('register_admin_auth.html')
-
-@admin_bp.route('/verify_password', methods=['POST'])
-def verify_password():
     password = request.form.get('password')
     # ここでパスワード認証処理（仮に 'admin123' が正解とする）
-    if password == 'admin123':
-        session['is_admin'] = True  # 管理者ログイン済みとしてセッションに保存
-        return redirect('/register_admin')  # 認証成功後にトップページへリダイレクト（必要に応じて変更）
-    else:
-        return render_template('register_admin_auth.html', error='パスワードが間違っています')
+    if request.method == 'POST': 
+        if password == 'admin123':
+            session['is_admin'] = True  # 管理者ログイン済みとしてセッションに保存
+            return redirect('/register_admin')  # 認証成功後にトップページへリダイレクト（必要に応じて変更）
+        else:
+            return render_template('register_admin_auth.html', error='パスワードが間違っています')
+        
+    # GET
+    return render_template('register_admin_auth.html')
     
 @admin_bp.route('/register_admin', methods=['GET', 'POST'])
 def register_admin():
@@ -43,7 +43,7 @@ def register_admin():
 
     return render_template('register_admin.html')
 
-@admin_bp.route('/admin', methods=['GET', 'POST'])
+@admin_bp.route('/manager/login', methods=['GET', 'POST'])
 def admin():
     if request.method == 'POST':
         username = request.form['username']
@@ -58,14 +58,3 @@ def admin():
             return render_template('admin.html', error=error)
 
     return render_template('admin.html')
-
-
-@admin_bp.route('/feedback/manage', methods=['GET', 'POST'])
-def manage_feedback():
-    if not session.get('admin_logged_in'):
-        return redirect(url_for('admin'))
-
-    # データベースからすべてのフィードバックを取得（例として全件）
-    feedback_list = Feedback.query.order_by(Feedback.created_at.desc()).all()
-
-    return render_template('manage_feedback.html', feedbacks=feedback_list)

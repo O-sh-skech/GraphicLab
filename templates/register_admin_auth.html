@@ -61,7 +61,7 @@
 <body>
     <h1>管理者認証</h1>
     <div class="form-container">
-        <form method="post" action="{{ url_for('admin.verify_password') }}">
+        <form method="post" action="{{ url_for('admin.register_admin_auth') }}">
             <label for="password">管理者パスワードを入力してください：</label>
             <input type="password" id="password" name="password" placeholder="パスワードを入力" required>
             <button type="submit">認証</button>

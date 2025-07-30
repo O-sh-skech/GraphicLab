@@ -22,7 +22,7 @@ from database.config import Config
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # 任意の長いランダムな文字列
-app.config.from_object(Config) # configを読み込む
+app.config.from_object(Config) #
 
 # SQLAlchemy の初期化
 db.init_app(app)
