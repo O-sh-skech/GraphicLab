@@ -35,8 +35,7 @@
   {% endif %}
 
   <!-- 戻るボタン -->
-  <button type="button" class="BackPreviousBtn admin-previousBtn"onclick="window.location.href='{{ url_for('feedback.manage_feedback') }}'">
-    BackPrevious
-  </button>
+   {% set back_url = url_for('feedback.manage_feedback') %}
+  <button type="button" class="feedBackPageBtn" onclick="window.location.href='{{ back_url }}'">BACK PREVIEWS</button>
 </body>
 </html>

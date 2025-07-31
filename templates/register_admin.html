@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="admin-auth-wrapper">
+  <div class="wrapper">
     <h1>Admin Registration</h1>
 
     {% if error %}
@@ -20,14 +20,11 @@
       <input type="text" id="username" name="username" placeholder="管理者名を入力" class="auth-input" required>
       <input type="password" id="password" name="password" placeholder="パスワードを入力" class="auth-input" required>
 
-      <div class="button-container">
-        <button type="submit" class="Registration">Register</button>
+        <button type="submit" class="adminPageBtn">REGISTER</button>
 
         {% set back_url = url_for('admin.admin') %}
-        <button type="button" class="BackPreviousBtn" onclick="window.location.href='{{ back_url }}'">
-          BackPrevious
-        </button>
-      </div>
+        <button type="button" class="adminPageBtn" onclick="window.location.href='{{ back_url }}'">BACK PREVIEWS</button>
+     
     </form>
   </div>
 </body>

@@ -31,20 +31,18 @@
       <button type="button" class="input-btn" data-insert="**">^</button>
       <button type="button" class="input-btn" data-insert="E">e</button>
     </div>
-    
+  </div> 
     <!-- 送信ボタンは2つ -->
-    <button id="plotBtn" type="submit" formaction="{{ url_for('index') }}">ClickMe</button>
-    <button id="animateBtn" type="submit" formaction="{{ url_for('animate') }}">PLAY ANIMATION</button>
-    <div class="floating-buttons">
-      <button id="pdfBtn" onclick="saveCanvasAsPDF()">SAVE PDF</button>
-      <button id="feedbackBtn" type="submit" formaction="{{ url_for('feedback.submit_feedback') }}">FEED BACK</button>
-      <button id="saveFuncBtn" type="submit" formaction="{{ url_for('function.prepare_save') }}" formmethod="post">SAVE FUNCTION</button>
-      <button id="historyBtn"  type="submit" formaction="{{ url_for('function.history') }}" formmethod="get">FUNCTION HISTORY</button>
+    <div class="main-buttons">
+      <button id="plotBtn" class="basePageBtn" type="submit" formaction="{{ url_for('index') }}">CLIKME</button>
+      <button id="animateBtn" class="basePageBtn" type="submit" formaction="{{ url_for('animate') }}">PLAY ANIMATION</button>
     </div>
-  </div>
-</div>
-
-</div>
+    <div class="floating-buttons">
+      <button class="basePageBtn" onclick="saveCanvasAsPDF()">SAVE PDF</button>
+      <button class="basePageBtn" type="submit" formaction="{{ url_for('feedback.submit_feedback') }}">FEEDBACK</button>
+      <button class="basePageBtn" type="submit" formaction="{{ url_for('function.prepare_save') }}" formmethod="post">SAVE FUNCTION</button>
+      <button class="basePageBtn"  type="submit" formaction="{{ url_for('function.history') }}" formmethod="get">FUNCTION HISTORY</button>
+    </div>
 
 
     <!-- コンテナ -->
