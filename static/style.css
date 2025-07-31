@@ -44,11 +44,16 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       padding: 20px;
     }
     .wrapper {
-     
       position: absolute;  /* 絶対配置 */
       left: 50%;           /* 左から50% */
       transform: translate(-50%, 0%); /* 自分の幅・高さの半分だけ戻す */
       text-align: center; 
+      padding: 20px;
+    }
+    .skinner {
+      position: absolute;  /* 絶対配置 */
+      left: 50%;           /* 左から50% */
+      transform: translate(-50%, 0%); /* 自分の幅・高さの半分だけ戻す */
       padding: 20px;
     }
 

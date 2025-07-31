@@ -39,7 +39,7 @@
     </div>
     <div class="floating-buttons">
       <button class="basePageBtn" onclick="saveCanvasAsPDF()">SAVE PDF</button>
-      <button class="basePageBtn" type="submit" formaction="{{ url_for('feedback.submit_feedback') }}">FEEDBACK</button>
+      <button class="basePageBtn" type="submit" formaction="{{ url_for('feedback.submit_feedback') }}" formmethod="get">FEEDBACK</button>
       <button class="basePageBtn" type="submit" formaction="{{ url_for('function.prepare_save') }}" formmethod="post">SAVE FUNCTION</button>
       <button class="basePageBtn"  type="submit" formaction="{{ url_for('function.history') }}" formmethod="get">FUNCTION HISTORY</button>
     </div>

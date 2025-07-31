@@ -16,7 +16,8 @@ def name_function():
 def prepare_save():
     function_text = request.form.get('function_text')
     if not function_text:
-        return redirect(url_for('index'))
+        error = "入力が空です！"
+        return render_template('draw.html', function_text="", error=error)
     
     # 関数式をセッションに保存
     session['function_text'] = function_text

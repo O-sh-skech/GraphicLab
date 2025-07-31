@@ -7,13 +7,12 @@
 </head>
 <body>
     <div class="wrapper"> 
-    <h1>THANKS FOR YOUR FEEDBACK</h1>
+    {% if message %}
+          <h1>{{ message }}</h1>
+    {% endif %}
     <h2>-We will use your feedback to make improvements-</h2>
     <form class="feedback-form" method="post" enctype="multipart/form-data">
       <div class="message-box">
-        {% if message %}
-          <h2>{{ message }}</h2>
-        {% endif %}
         <!-- 項目名のプルダウンメニュー -->
         <label for="category">項目名</label>
         <select id="category" name="category" required>
