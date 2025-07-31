@@ -21,46 +21,61 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
         transform: translate(-50%, 0%); /* 自分の幅・高さの半分だけ戻す */
         display: block;
     }
-
-    .BackPreviousBtn {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100px;
-      padding: 8px 0;
-      text-align: center;
+     /* 各ボタンの共通スタイル */
+    .basePageBtn,
+    .feedBackPageBtn,
+    .adminPageBtn {
       background-color: rgb(226, 143, 9);
-      color: #000000;
-      cursor: pointer;
+    }
+    /* --- 右下に横並びボタンを固定配置 --- */
+    .floating-buttons {
+      padding: 2px;
+      position: fixed;
+      bottom: 30px;
+      right: 20px;
+      display: flex;
+      flex-direction: row; /* 横並びに変更 */
+      gap: 10px; /* ボタンの間隔 */
+      z-index: 10;
     }
     
     .layout {
       position: relative;
       padding: 20px;
     }
+    .wrapper {
+      position: absolute;  /* 絶対配置 */
+      left: 50%;           /* 左から50% */
+      transform: translate(-50%, 0%); /* 自分の幅・高さの半分だけ戻す */
+      text-align: center; 
+      padding: 20px;
+    }
+    .skinner {
+      position: absolute;  /* 絶対配置 */
+      left: 50%;           /* 左から50% */
+      transform: translate(-50%, 0%); /* 自分の幅・高さの半分だけ戻す */
+      padding: 20px;
+    }
 
     #plotBtn {
       position: relative;
-      background-color: rgb(226, 143, 9);
+      left: 20px;
     }
-    /* PLAY ANIMATION ボタンだけ右上固定 */
     #animateBtn {
-      position: absolute;
-      right: 10px;  /* 右から10px */
-      background-color: rgb(226, 143, 9);
+      position: fixed;
+      right: 20px;  /* 右から10px */
       z-index: 10;  /* 他の要素より前面に */
     }
-
-    /* --- 右下に横並びボタンを固定配置 --- */
-    .floating-buttons {
-      position: fixed;
+    .main-buttons {
+      position: relative;
       bottom: 20px;
-      right: 10px;
-      display: flex;
       flex-direction: row; /* 横並びに変更 */
-      gap: 10px; /* ボタンの間隔 */
-      z-index: 10;
     }
+    
+
+    
+
+
     .zoom-buttons {
     position: absolute;
     left: calc(50% + 35vw + 20px); /* three-canvasの左端50% + 半分の幅 + マージン */
@@ -75,10 +90,7 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
   filter: brightness(70%);
   }
 
-    /* 各ボタンの共通スタイル */
-    #pdfBtn, #feedbackBtn, #adminBtn ,#saveFuncBtn ,#historyBtn {
-      background-color: rgb(226, 143, 9);
-    }
+   
 
 /* feedback,管理者ページのスタイル */
     h1, h2{
@@ -87,7 +99,7 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
     }
 
     .feedback-form {
-      padding: 20px;
+      /*padding: 20px;*/
       border-radius: 8px;
       text-align: left;
     }
@@ -138,32 +150,6 @@ body { background-color: #1b2c33; color: #fff; font-family: sans-serif; }
       background-color: #fddaea;
     }
 
-    /*各ボタンのスタイル*/
-    .BackPreviousBtn,
-    .SendFeedBackBtn,
-    .AdminAuthBtn,
-    .LoginBtn,
-    .Registration {
-      background-color: rgb(226, 143, 9);
-      color: #000000;
-      padding: 3px ;
-      cursor: pointer;
-      width: 100px;
-      text-align: center;
-    }
-
-    .button-container {
-      display: flex;
-      justify-content: center;
-      gap: 30px
-    }
-
-    .admin-auth-wrapper {
-      max-width: 350px;
-      margin: 0 auto;      /*  中央寄せ */
-      padding: 20px;
-      text-align: center; 
-    }
 
     .auth-input {
       width: 250px;     

@@ -7,6 +7,7 @@
   <title>Manage Feedback</title>
 </head>
 <body>
+  <div class="skinner">
   <h2>Feedback Manager</h2>
 
   <!-- 検索・項目フィルター -->
@@ -69,8 +70,9 @@
 
   <!--　戻るボタン -->
   {% set back_url = url_for('index') %}
-  <button type="button" class="BackPreviousBtn floating-buttons" onclick="window.location.href='{{ back_url }}'">
-    BackPrevious
+  <button type="button" class="feedBackPageBtn" onclick="window.location.href='{{ back_url }}'">
+    BACK PREVIEWS
   </button>
+  </div>
 </body>
 </html>

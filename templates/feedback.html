@@ -6,13 +6,13 @@
   <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-    <h1>THANKS FOR YOUR FEEDBACK</h1>
+    <div class="wrapper"> 
+    {% if message %}
+          <h1>{{ message }}</h1>
+    {% endif %}
     <h2>-We will use your feedback to make improvements-</h2>
     <form class="feedback-form" method="post" enctype="multipart/form-data">
       <div class="message-box">
-        {% if message %}
-          <h2>{{ message }}</h2>
-        {% endif %}
         <!-- 項目名のプルダウンメニュー -->
         <label for="category">項目名</label>
         <select id="category" name="category" required>
@@ -35,22 +35,15 @@
         <label for="content"></label>
         <textarea id="content" name="content" maxlength="200" minlength="10" placeholder="内容" required></textarea>
       </div>
+      </div>
 
-      <!-- 戻るボタン -->
       <div class="floating-buttons">
         {% set back_url = url_for('index') %}
-        <button type="button" class="BackPreviousBtn" onclick="window.location.href='{{ back_url }}'">
-          BackPrevious
-        </button>
-      
-        <!-- フィードバック情報をルーティング関数に渡す -->
-        <button type="submit" class="SendFeedBackBtn" formaction="{{ url_for('feedback.submit_feedback') }}">SendFeedBack</button>
-
-        <!-- 管理者ログインページに遷移-->
-         {% set admin_url = url_for('admin.admin') %}
-        <button type="button" class="AdminAuthBtn" onclick="window.location.href='{{ admin_url }}'">
-          AdminAuth
-        </button>
+        <button type="button" class="feedBackPageBtn" onclick="window.location.href='{{ back_url }}'">BACK PREVIEWS</button>
+        <button type="submit" class="feedBackPageBtn" formaction="{{ url_for('feedback.submit_feedback') }}">SENDFEEDBACK</button>
+        {% set admin_url = url_for('admin.admin') %}
+        <button type="button" class="feedBackPageBtn" onclick="window.location.href='{{ admin_url }}'">ADMIN AUTH</button>
+      </div>
     </form>
 </body>
 </html>

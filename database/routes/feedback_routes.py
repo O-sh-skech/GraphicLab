@@ -69,8 +69,8 @@ def submit_feedback():
 
         message = "Thank you for your feedback!"
         return render_template('feedback.html', message=message)
-
-    return render_template('feedback.html')
+    message= "Welcome to feedback page!"
+    return render_template('feedback.html', message=message)
 
 # フィードバック一覧と検索/フィルター/ソート(日付)
 @feedback_bp.route('/manager/feedback', methods=['GET', 'POST'])

@@ -6,25 +6,20 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="admin-auth-wrapper">  <!-- ← ここで幅と中央揃えを管理 -->
+  <div class="wrapper">  <!-- ← ここで幅と中央揃えを管理 -->
     <h1>Register Admin Login</h1>
 
     {% if error %}
     <p class="error-message">{{ error }}</p>
     {% endif %}
-
-    <form method="POST" action="{{ url_for('admin.register_admin_auth') }}">
+  <form method="POST" action="{{ url_for('admin.register_admin_auth') }}">
       <input type="password" name="password" placeholder="登録用パスワードを入力" class="auth-input" required>
-
       <div class="button-container">
-        <button type="submit" class="LoginBtn">Login</button>
-
-        {% set back_url = url_for('admin.admin') %}
-        <button type="button" class="LoginBtn" onclick="window.location.href='{{ back_url }}'">
-          BackPrevious
-        </button>
+      <button type="submit" class="adminPageBtn">LOGIN</button>
+      {% set back_url = url_for('admin.admin') %}
+      <button type="button" class="adminPageBtn" onclick="window.location.href='{{ back_url }}'">BACK PREVIEWS</button>
       </div>
-    </form>
+  </form>
   </div>
 </body>
 </html>
