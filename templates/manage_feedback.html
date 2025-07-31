@@ -44,7 +44,9 @@
   {% for feedback in feedbacks %}
   <li>
     <a href="{{ url_for('feedback.feedback_detail', feedback_id=feedback.id) }}">
-      <strong>[{{ feedback.id }}]</strong> {{ feedback.title }}
+      <strong>[{{ feedback.id }}]</strong>
+      <strong>[{{ feedback.category}}]</strong>
+      {{ feedback.title }}
     </a><br>
 
     <!-- ステータス変更 -->
