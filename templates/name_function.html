@@ -16,6 +16,8 @@
             
             <div class="button-container">
                 <button type="submit" class="adminPageBtn">保存</button>
+                {% set back_url = url_for('index') %}
+                <button type="button" class="adminPageBtn" onclick="window.location.href='{{ back_url }}'">戻る</button>
             </div>
         </form>
     </div>
