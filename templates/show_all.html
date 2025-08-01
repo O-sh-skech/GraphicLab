@@ -16,7 +16,7 @@
         font-size: 1.5rem;       /* 見た目の調整。32pxにしたいなら 2rem */
         padding: 0.4em 0.8em;    /* 高さを稼ぐ */
         bottom: 10px;          /* 明示的に高さを指定することでh1と揃える */
-        width: 3.5em;
+        width: 6.0em;
         line-height: 1;          /* テキストの中央寄せ */
         border: none;
         border-radius: 8px;
@@ -109,18 +109,18 @@
 </head>
 <body>
     <div class="function-header">
-        <h1>関数一覧</h1>
+        <h1>Function List</h1>
         <div class="button-group">
-            <button class="btn select-btn" onclick="toggleSelectMode()">選択</button>
-            <button class="btn delete-btn" onclick="toggleDeleteMode()">消去</button>
+            <button class="btn select-btn" onclick="toggleSelectMode()">SLEECT</button>
+            <button class="btn delete-btn" onclick="toggleDeleteMode()">DELEATE</button>
         </div>
     </div>
 
     {% for func in functions %}
     <div class="function-card" data-id="{{ func.id }}" onclick="selectFunction('{{ func.id }}')">
-        <p><strong>保存名：</strong> {{ func.name }}</p>
-        <p><strong>関数　：</strong> {{ func.expression }}</p>
-        <p><strong>日時　：</strong> {{ func.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        <p><strong>NAME：</strong> {{ func.name }}</p>
+        <p><strong>Function</strong>　：</strong> {{ func.expression }}</p>
+        <p><strong>DATE　：</strong> {{ func.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
     </div>
     {% endfor %}
     {% set back_url = url_for('index') %}
