@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="wrapper">
-        <h1>関数に名前をつけて保存</h1>
+        <h1>Save Function with a Name</h1>
 
         <form action="{{ url_for('function.save_function') }}" method="post">
             <input type="text" id="function_name" name="function_name" placeholder="保存名を入力" class="auth-input" required>
@@ -15,9 +15,9 @@
             <input type="hidden" name="function_text" value="{{ function_text }}">
             
             <div class="button-container">
-                <button type="submit" class="adminPageBtn">保存</button>
+                <button type="submit" class="adminPageBtn">SAVE</button>
                 {% set back_url = url_for('index') %}
-                <button type="button" class="adminPageBtn" onclick="window.location.href='{{ back_url }}'">戻る</button>
+                <button type="button" class="adminPageBtn" onclick="window.location.href='{{ back_url }}'">BACK GRAPH</button>
             </div>
         </form>
     </div>
